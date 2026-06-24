@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: monstermeter_db
+    environment:
+      POSTGRES_DB: monstermeter
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
