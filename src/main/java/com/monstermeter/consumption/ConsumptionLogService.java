@@ -18,7 +18,7 @@ public class ConsumptionLogService {
     private final DrinkRepository drinkRepository;
 
     public List<ConsumptionLog> getLogsByUser(Long userId) {
-        return consumptionLogRepository.findByUserId(userId);
+        return consumptionLogRepository.findByUserIdOrderByLoggedAtDesc(userId);
     }
 
     public List<ConsumptionLog> getLogsByDrink(Long drinkId) {
