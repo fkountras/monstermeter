@@ -36,8 +36,7 @@ public class SecurityConfig {
                                 "http://localhost:5500",
                                 "http://127.0.0.1:5500",
                                 "null",
-                                "https://fkountras.github.io",
-                                "http://monstermeter.com"));
+                                "https://fkountras.github.io"));
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
                 config.setAllowedHeaders(List.of("*"));
                 return source -> {
