@@ -10,6 +10,7 @@ public class UserResponseDTO {
     private String username;
     private String email;
     private LocalDateTime createdAt;
+    private String profilePicture;
 
     public static UserResponseDTO from(User user) {
         UserResponseDTO dto = new UserResponseDTO();
@@ -17,6 +18,7 @@ public class UserResponseDTO {
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setCreatedAt(user.getCreatedAt());
+        dto.setProfilePicture(user.getProfilePicture());
         return dto;
     }
 }

@@ -27,4 +27,7 @@ public class User {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "profile_picture")
+    private String profilePicture;
 }
