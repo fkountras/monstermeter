@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MonsterMeter – Friends</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0f14;
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      color: #c8f0f0;
+      padding: 1.5rem 1rem;
+    }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 0.5px solid #1e2d3a;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 3px;
+      color: #c8f0f0;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a {
+      font-size: 13px; color: #5a7080;
+      text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: #4dd9e0; }
+    .nav-user { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #1e2d3a; border: 1px solid #4dd9e0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 500; color: #4dd9e0;
+    }
+    .logout-btn {
+      font-size: 12px; color: #5a7080; background: none;
+      border: none; cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: color 0.2s;
+    }
+    .logout-btn:hover { color: #f09595; }
+
+    /* ── Page header ── */
+    .page-header { margin-bottom: 2rem; }
+    .page-header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px; letter-spacing: 2px; color: #c8f0f0; line-height: 1;
+    }
+    .page-header p { font-size: 13px; color: #5a7080; margin-top: 6px; }
+
+    /* ── Search ── */
+    .search-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+    .search-box input {
+      flex: 1;
+      background: #111820;
+      border: 0.5px solid #1e2d3a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px; color: #c8f0f0;
+      font-family: 'Inter', sans-serif;
+      outline: none; transition: border-color 0.2s;
+    }
+    .search-box input:focus { border-color: #4dd9e0; }
+    .search-box input::placeholder { color: #2a3d4a; }
+    .btn-search {
+      padding: 10px 20px;
+      background: #4dd9e0; color: #0a0f14;
+      border: none; border-radius: 8px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 15px; letter-spacing: 1.5px;
+      cursor: pointer; transition: background 0.2s; white-space: nowrap;
+    }
+    .btn-search:hover { background: #c8f0f0; }
+
+    /* ── Cards ── */
+    .result-card, .pending-card, .friends-card {
+      background: #111820;
+      border: 0.5px solid #1e2d3a;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+      display: none;
+    }
+    .result-card.visible,
+    .pending-card.visible,
+    .friends-card.visible { display: block; }
+
+    .result-item, .pending-item, .friend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 0.5px solid #1e2d3a;
+    }
+    .result-item:last-child,
+    .pending-item:last-child,
+    .friend-item:last-child { border-bottom: none; }
+
+    .user-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #1e2d3a;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 500; color: #4dd9e0; flex-shrink: 0;
+    }
+    .user-info { flex: 1; }
+    .user-name { font-size: 14px; font-weight: 500; color: #c8f0f0; }
+    .user-sub { font-size: 12px; color: #5a7080; margin-top: 2px; }
+
+    /* ── Buttons ── */
+    .btn-add {
+      padding: 6px 14px;
+      background: transparent;
+      border: 0.5px solid #4dd9e0;
+      border-radius: 6px;
+      font-size: 12px; color: #4dd9e0;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .btn-add:hover { background: #4dd9e0; color: #0a0f14; }
+    .btn-add:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-accept {
+      padding: 6px 14px;
+      background: #4dd9e0; color: #0a0f14;
+      border: none; border-radius: 6px;
+      font-size: 12px; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-weight: 500;
+      transition: background 0.2s; white-space: nowrap;
+    }
+    .btn-accept:hover { background: #c8f0f0; }
+
+    /* ── Friend stat ── */
+    .friend-stat {
+      font-size: 12px; color: #5a7080; text-align: right;
+    }
+    .friend-stat span {
+      display: block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px; color: #4dd9e0; letter-spacing: 1px;
+    }
+
+    /* ── Section title ── */
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px; letter-spacing: 2px; color: #c8f0f0;
+      margin-bottom: 1rem;
+    }
+
+    /* ── States ── */
+    .empty-state {
+      background: #111820;
+      border: 0.5px dashed #1e2d3a;
+      border-radius: 12px;
+      padding: 2rem; text-align: center;
+      color: #5a7080; font-size: 13px; margin-bottom: 2rem;
+    }
+    .error-msg {
+      background: rgba(162, 45, 45, 0.15);
+      border: 0.5px solid #a32d2d; border-radius: 8px;
+      padding: 10px 14px; font-size: 13px; color: #f09595;
+      margin-bottom: 1rem; display: none;
+    }
+    .success-msg {
+      background: rgba(13, 110, 86, 0.15);
+      border: 0.5px solid #0f6e56; border-radius: 8px;
+      padding: 10px 14px; font-size: 13px; color: #5dcaa5;
+      margin-bottom: 1rem; display: none;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="dashboard.html">MonsterMeter</a>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="log.html">Log drink</a>
+    <a href="friends.html" class="active">Friends</a>
+    <a href="map.html">Map</a>
+  </div>
+  <div class="nav-user">
+    <div class="avatar" id="nav-avatar">--</div>
+    <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Friends</h1>
+  <p>Find people and compare your stats</p>
+</div>
+
+<div class="error-msg" id="error-msg"></div>
+<div class="success-msg" id="success-msg"></div>
+
+<!-- Search -->
+<div class="search-box">
+  <input type="text" id="search-input" placeholder="Search by username..." />
+  <button class="btn-search" onclick="handleSearch()">Search</button>
+</div>
+
+<!-- Search results -->
+<div class="result-card" id="result-card"></div>
+
+<!-- Pending requests -->
+<div id="pending-section">
+  <div class="section-title">Pending requests</div>
+  <div class="pending-card" id="pending-card"></div>
+  <div class="empty-state" id="pending-empty" style="display:none;">No pending friend requests.</div>
+</div>
+
+<!-- Friends list -->
+<div id="friends-section">
+  <div class="section-title">Your friends</div>
+  <div class="friends-card" id="friends-card"></div>
+  <div class="empty-state" id="friends-empty" style="display:none;">No friends yet — search for someone above!</div>
+</div>
+
+<script>
+  const API_BASE = 'http://localhost:8080/api';
+
+  // ── Auth guard ──
+  const userId   = localStorage.getItem('userId');
+  const username = localStorage.getItem('username');
+  if (!userId || !username) window.location.href = 'login.html';
+
+  // ── Set nav avatar ──
+  $('#nav-avatar').text(username.substring(0, 2).toUpperCase());
+
+  // ── Helpers ── 
+  function initials(name) {
+    return name.substring(0, 2).toUpperCase();
+  }
+  function showError(msg) {
+    $('#error-msg').text(msg).show();
+    setTimeout(() => $('#error-msg').hide(), 3000);
+  }
+  function showSuccess(msg) {
+    $('#success-msg').text(msg).show();
+    setTimeout(() => $('#success-msg').hide(), 3000);
+  }
+
+  // ── Search users ──
+  function handleSearch() {
+    const query = $('#search-input').val().trim();
+    if (!query) return;
+
+    $.ajax({
+      url: API_BASE + '/users/search?username=' + encodeURIComponent(query),
+      method: 'GET',
+      success: function(users) {
+        const $card = $('#result-card');
+        $card.empty().addClass('visible');
+
+        // Filter out yourself
+        const others = users.filter(u => u.id != userId);
+
+        if (others.length === 0) {
+          $card.append('<div style="padding:1rem; font-size:13px; color:#5a7080;">No users found.</div>');
+          return;
+        }
+
+        others.forEach(function(user) {
+          const joined = new Date(user.createdAt).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+          $card.append(`
+            <div class="result-item">
+              <div class="user-avatar">${initials(user.username)}</div>
+              <div class="user-info">
+                <div class="user-name">${user.username}</div>
+                <div class="user-sub">Joined ${joined}</div>
+              </div>
+              <button class="btn-add" onclick="sendRequest(${user.id}, this)">+ Add</button>
+            </div>
+          `);
+        });
+      },
+      error: function() {
+        showError('Search failed. Is the backend running?');
+      }
+    });
+  }
+
+  // ── Send friend request ──
+  function sendRequest(receiverId, btn) {
+    $(btn).prop('disabled', true).text('Sending...');
+
+    $.ajax({
+      url: API_BASE + '/friendships/request?requesterId=' + userId + '&receiverId=' + receiverId,
+      method: 'POST',
+      success: function() {
+        $(btn).text('Sent ✓');
+        showSuccess('Friend request sent!');
+      },
+      error: function() {
+        $(btn).prop('disabled', false).text('+ Add');
+        showError('Could not send request. Maybe already sent?');
+      }
+    });
+  }
+
+  // ── Accept friend request ──
+  function acceptRequest(friendshipId, itemEl) {
+    $.ajax({
+      url: API_BASE + '/friendships/' + friendshipId + '/status?status=ACCEPTED',
+      method: 'PATCH',
+      success: function() {
+        $(itemEl).remove();
+        showSuccess('Friend request accepted!');
+        loadFriends();
+        // Hide pending card if empty
+        if ($('#pending-card .pending-item').length === 0) {
+          $('#pending-card').removeClass('visible');
+          $('#pending-empty').show();
+        }
+      },
+      error: function() {
+        showError('Could not accept request.');
+      }
+    });
+  }
+
+  // ── Load pending requests ──
+  function loadPending() {
+    $.ajax({
+      url: API_BASE + '/friendships/pending/' + userId,
+      method: 'GET',
+      success: function(requests) {
+        const $card = $('#pending-card');
+        $card.empty();
+
+        if (requests.length === 0) {
+          $card.removeClass('visible');
+          $('#pending-empty').show();
+          return;
+        }
+
+        $card.addClass('visible');
+        $('#pending-empty').hide();
+
+        requests.forEach(function(req) {
+          $card.append(`
+            <div class="pending-item" id="pending-${req.id}">
+              <div class="user-avatar">${initials(req.requester?.username || '?')}</div>
+              <div class="user-info">
+                <div class="user-name">${req.requester?.username || 'Unknown'}</div>
+                <div class="user-sub">Wants to be your friend</div>
+              </div>
+              <button class="btn-accept" onclick="acceptRequest(${req.id}, '#pending-${req.id}')">Accept</button>
+            </div>
+          `);
+        });
+      },
+      error: function() {
+        $('#pending-empty').text('Could not load pending requests.').show();
+      }
+    });
+  }
+
+  // ── Load friends ──
+  function loadFriends() {
+    $.ajax({
+      url: API_BASE + '/friendships/friends/' + userId,
+      method: 'GET',
+      success: function(friends) {
+        const $card = $('#friends-card');
+        $card.empty();
+
+        if (friends.length === 0) {
+          $card.removeClass('visible');
+          $('#friends-empty').show();
+          return;
+        }
+
+        $card.addClass('visible');
+        $('#friends-empty').hide();
+
+        friends.forEach(function(f) {
+          // The friend is whichever side isn't us
+          const friend = f.requester?.id == userId ? f.receiver : f.requester;
+          if (!friend) return;
+
+          // Load their log count
+          $.ajax({
+            url: API_BASE + '/logs/user/' + friend.id,
+            method: 'GET',
+            success: function(logs) {
+              $card.append(`
+                <div class="friend-item">
+                  <div class="user-avatar">${initials(friend.username)}</div>
+                  <div class="user-info">
+                    <div class="user-name">${friend.username}</div>
+                    <div class="user-sub">Friend</div>
+                  </div>
+                  <div class="friend-stat">
+                    Total cans
+                    <span>${logs.length}</span>
+                  </div>
+                </div>
+              `);
+            },
+            error: function() {
+              $card.append(`
+                <div class="friend-item">
+                  <div class="user-avatar">${initials(friend.username)}</div>
+                  <div class="user-info">
+                    <div class="user-name">${friend.username}</div>
+                    <div class="user-sub">Friend</div>
+                  </div>
+                  <div class="friend-stat">Total cans<span>--</span></div>
+                </div>
+              `);
+            }
+          });
+        });
+      },
+      error: function() {
+        $('#friends-empty').text('Could not load friends.').show();
+      }
+    });
+  }
+
+  // ── Allow Enter key to search ──
+  $('#search-input').on('keypress', function(e) {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  // ── Logout ──
+  function handleLogout() {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    window.location.href = 'login.html';
+  }
+
+  // ── Init ──
+  loadPending();
+  loadFriends();
+</script>
+
+</body>
+</html>

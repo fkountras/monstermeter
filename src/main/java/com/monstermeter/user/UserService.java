@@ -34,4 +34,8 @@ public class UserService {
         }
         return UserResponseDTO.from(user);
     }
+
+    public List<User> searchByUsername(String username) {
+        return userRepository.findByUsernameContainingIgnoreCase(username);
+    }
 }

@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,5 +32,12 @@ public class UserController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
+    }
+
+    @GetMapping("/search")
+    public List<UserResponseDTO> searchUsers(@RequestParam String username) {
+        return userService.searchByUsername(username).stream()
+                .map(UserResponseDTO::from)
+                .toList();
     }
 }
