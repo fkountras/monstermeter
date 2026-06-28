@@ -2,42 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>MonsterMeter – Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <style>
+    html { background: #0d1318; height: 100%; }
+    :root { --safe-bottom: env(safe-area-inset-bottom, 0px); }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #0a0f14; min-height: 100vh;
-      font-family: 'Inter', sans-serif; color: #c8f0f0;
-      padding: 1.5rem 1rem 5rem;
-    }
-    nav {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 0.5px solid #1e2d3a;
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif; font-size: 24px;
-      letter-spacing: 3px; color: #c8f0f0; text-decoration: none;
-    }
+    body { background: #0a0f14; min-height: 100%; font-family: 'Inter', sans-serif; color: #c8f0f0; padding: 1.5rem 1rem 5rem; }
+    nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 0.5px solid #1e2d3a; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: #c8f0f0; text-decoration: none; }
     .nav-right { display: flex; align-items: center; gap: 10px; }
-    .avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #1e2d3a; border: 1px solid #4dd9e0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 500; color: #4dd9e0;
-    }
-    .logout-btn {
-      font-size: 12px; color: #5a7080; background: none;
-      border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s;
-    }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: #1e2d3a; border: 1px solid #4dd9e0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #4dd9e0; }
+    .logout-btn { font-size: 12px; color: #5a7080; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s; }
     .logout-btn:hover { color: #f09595; }
     .greeting { margin-bottom: 2rem; }
-    .greeting h1 {
-      font-family: 'Bebas Neue', sans-serif; font-size: 36px;
-      letter-spacing: 2px; color: #c8f0f0; line-height: 1;
-    }
+    .greeting h1 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: #c8f0f0; line-height: 1; }
     .greeting p { font-size: 13px; color: #5a7080; margin-top: 6px; }
     .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 1.5rem; }
     .stat-card { background: #111820; border: 0.5px solid #1e2d3a; border-radius: 12px; padding: 1rem 1.25rem; }
@@ -46,65 +27,29 @@
     .stat-sub { font-size: 11px; color: #5a7080; margin-top: 4px; }
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: #c8f0f0; }
-    .btn-primary {
-      padding: 10px 20px; background: #4dd9e0; color: #0a0f14; border: none;
-      border-radius: 8px; font-family: 'Bebas Neue', sans-serif; font-size: 15px;
-      letter-spacing: 1.5px; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block;
-    }
+    .btn-primary { padding: 10px 20px; background: #4dd9e0; color: #0a0f14; border: none; border-radius: 8px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1.5px; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block; }
     .btn-primary:hover { background: #c8f0f0; }
     .btn-ghost { font-size: 12px; color: #4dd9e0; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; }
     .log-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
-    .log-item {
-      background: #111820; border: 0.5px solid #1e2d3a; border-radius: 10px;
-      padding: 12px 16px; display: flex; align-items: center; gap: 12px;
-    }
-    .log-icon {
-      width: 36px; height: 36px; border-radius: 8px; background: #0a0f14;
-      border: 0.5px solid #1e2d3a; display: flex; align-items: center;
-      justify-content: center; font-size: 18px; flex-shrink: 0;
-    }
+    .log-item { background: #111820; border: 0.5px solid #1e2d3a; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+    .log-icon { width: 36px; height: 36px; border-radius: 8px; background: #0a0f14; border: 0.5px solid #1e2d3a; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
     .log-info { flex: 1; min-width: 0; }
     .log-drink { font-size: 14px; font-weight: 500; color: #c8f0f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .log-meta { font-size: 12px; color: #5a7080; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .log-time { font-size: 11px; color: #5a7080; text-align: right; flex-shrink: 0; }
-    .empty-state {
-      background: #111820; border: 0.5px dashed #1e2d3a; border-radius: 12px;
-      padding: 2rem; text-align: center; color: #5a7080; font-size: 13px; margin-bottom: 1.5rem;
-    }
+    .empty-state { background: #111820; border: 0.5px dashed #1e2d3a; border-radius: 12px; padding: 2rem; text-align: center; color: #5a7080; font-size: 13px; margin-bottom: 1.5rem; }
     .loading-text { color: #5a7080; font-size: 13px; padding: 1rem 0; }
-    .error-msg {
-      background: rgba(162,45,45,0.15); border: 0.5px solid #a32d2d;
-      border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #f09595; margin-bottom: 1rem;
-    }
-    /* ── Bottom nav ── */
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: #0d1318; border-top: 0.5px solid #1e2d3a;
-      display: flex; justify-content: space-around;
-      padding: 0.6rem 0 0.8rem; z-index: 100;
-    }
-    .bottom-nav a {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      font-size: 10px; color: #5a7080; text-decoration: none;
-      letter-spacing: 0.5px; transition: color 0.2s;
-    }
+    .error-msg { background: rgba(162,45,45,0.15); border: 0.5px solid #a32d2d; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #f09595; margin-bottom: 1rem; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0d1318; border-top: 0.5px solid #1e2d3a; display: flex; justify-content: space-around; padding: 0.6rem 0 calc(0.8rem + env(safe-area-inset-bottom)); z-index: 100; }
+    .bottom-nav::after { content: ''; position: fixed; bottom: 0; left: 0; right: 0; height: env(safe-area-inset-bottom); background: #0d1318; z-index: 99; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
     .bottom-nav a.active { color: #4dd9e0; }
     .bottom-nav .icon { font-size: 20px; }
-    /* ── Desktop nav ── */
     .desktop-nav { display: flex; gap: 1.5rem; align-items: center; }
     .desktop-nav a { font-size: 13px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
     .desktop-nav a:hover, .desktop-nav a.active { color: #4dd9e0; }
-    @media (max-width: 600px) {
-      .desktop-nav { display: none; }
-      .greeting h1 { font-size: 28px; }
-      .stat-value { font-size: 26px; }
-      .stat-label { font-size: 10px; }
-      .stat-card { padding: 0.75rem; }
-    }
-    @media (min-width: 601px) {
-      .bottom-nav { display: none; }
-      body { padding-bottom: 1.5rem; }
-    }
+    @media (max-width: 600px) { .desktop-nav { display: none; } .greeting h1 { font-size: 28px; } .stat-value { font-size: 26px; } .stat-label { font-size: 10px; } .stat-card { padding: 0.75rem; } }
+    @media (min-width: 601px) { .bottom-nav { display: none; } body { padding-bottom: 1.5rem; } }
   </style>
 </head>
 <body>
@@ -121,70 +66,49 @@
     <button class="logout-btn" onclick="handleLogout()">Sign out</button>
   </div>
 </nav>
-
 <div class="greeting">
   <h1 id="greeting-text">Welcome back!</h1>
   <p id="greeting-date"></p>
 </div>
-
 <div class="stats-grid">
-  <div class="stat-card">
-    <div class="stat-label">Total</div>
-    <div class="stat-value" id="stat-total">--</div>
-    <div class="stat-sub">all time</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-label">Week</div>
-    <div class="stat-value" id="stat-week">--</div>
-    <div class="stat-sub">7 days</div>
-  </div>
-  <div class="stat-card">
-    <div class="stat-label">Friends</div>
-    <div class="stat-value" id="stat-friends">--</div>
-    <div class="stat-sub">connected</div>
-  </div>
+  <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" id="stat-total">--</div><div class="stat-sub">all time</div></div>
+  <div class="stat-card"><div class="stat-label">Week</div><div class="stat-value" id="stat-week">--</div><div class="stat-sub">7 days</div></div>
+  <div class="stat-card"><div class="stat-label">Friends</div><div class="stat-value" id="stat-friends">--</div><div class="stat-sub">connected</div></div>
 </div>
-
 <div class="section-header">
   <div class="section-title">Recent logs</div>
   <a class="btn-primary" href="log.html">+ Log</a>
 </div>
 <div id="log-list" class="log-list"><div class="loading-text">Loading...</div></div>
-
 <div class="section-header">
   <div class="section-title">Friends activity</div>
   <button class="btn-ghost" onclick="window.location.href='friends.html'">See all →</button>
 </div>
 <div id="friends-activity" class="empty-state">Loading friends activity...</div>
-
 <nav class="bottom-nav">
   <a href="dashboard.html" class="active"><span class="icon">🏠</span>Home</a>
   <a href="log.html"><span class="icon">🥤</span>Log</a>
   <a href="friends.html"><span class="icon">👥</span>Friends</a>
   <a href="map.html"><span class="icon">📍</span>Map</a>
 </nav>
-
 <script>
   const API_BASE = 'https://monstermeter-production.up.railway.app/api';
   const userId = localStorage.getItem('userId');
   const username = localStorage.getItem('username');
   if (!userId || !username) window.location.href = 'login.html';
-
   $('#nav-avatar').text(username.substring(0, 2).toUpperCase());
   $('#greeting-text').text('Welcome back, ' + username + ' 👋');
   const now = new Date();
   $('#greeting-date').text(now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
-
   function formatLogDate(dateStr) {
     const date = new Date(dateStr);
     const today = new Date();
     const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
     const timeStr = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-    if (date.toDateString() === today.toDateString()) return 'Today\n' + timeStr;
-    if (date.toDateString() === yesterday.toDateString()) return 'Yesterday\n' + timeStr;
+    if (date.toDateString() === today.toDateString()) return 'Today<br>' + timeStr;
+    if (date.toDateString() === yesterday.toDateString()) return 'Yesterday<br>' + timeStr;
     return date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
   }
-
   function loadLogs() {
     $.ajax({
       url: API_BASE + '/logs/user/' + userId, method: 'GET',
@@ -196,17 +120,12 @@
         if (logs.length === 0) { $list.html('<div class="empty-state">No drinks logged yet — hit the button above to start tracking!</div>'); return; }
         logs.slice(0, 5).forEach(function(log) {
           const notes = log.notes || 'No notes';
-          const timeDisplay = formatLogDate(log.loggedAt).replace('\n', '<br>');
-          $list.append(`<div class="log-item"><div class="log-icon">🥤</div><div class="log-info"><div class="log-drink">${log.drinkName}</div><div class="log-meta">${notes}</div></div><div class="log-time">${timeDisplay}</div></div>`);
+          $list.append(`<div class="log-item"><div class="log-icon">🥤</div><div class="log-info"><div class="log-drink">${log.drinkName}</div><div class="log-meta">${notes}</div></div><div class="log-time">${formatLogDate(log.loggedAt)}</div></div>`);
         });
       },
-      error: function() {
-        $('#log-list').html('<div class="error-msg">Could not load logs. Is the backend running?</div>');
-        $('#stat-total').text('--'); $('#stat-week').text('--');
-      }
+      error: function() { $('#log-list').html('<div class="error-msg">Could not load logs.</div>'); $('#stat-total').text('--'); $('#stat-week').text('--'); }
     });
   }
-
   function loadFriends() {
     $.ajax({
       url: API_BASE + '/friendships/friends/' + userId, method: 'GET',
@@ -218,12 +137,7 @@
       error: function() { $('#stat-friends').text('--'); $('#friends-activity').text('Could not load friends data.'); }
     });
   }
-
-  function handleLogout() {
-    localStorage.removeItem('userId'); localStorage.removeItem('username');
-    window.location.href = 'login.html';
-  }
-
+  function handleLogout() { localStorage.removeItem('userId'); localStorage.removeItem('username'); window.location.href = 'login.html'; }
   loadLogs(); loadFriends();
 </script>
 </body>
