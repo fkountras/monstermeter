@@ -171,6 +171,9 @@
         $('#info-joined').text(joined);
         setAvatar(user.profilePicture);
         setProfileAvatar(user.profilePicture);
+        if (user.profilePicture) {
+  localStorage.setItem('profilePicture', user.profilePicture);
+}
       },
       error: function() { $('#error-msg').text('Could not load profile.').show(); }
     });

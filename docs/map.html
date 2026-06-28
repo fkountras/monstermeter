@@ -14,7 +14,7 @@
     nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 0.5px solid #1e2d3a; }
     .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: #c8f0f0; text-decoration: none; }
     .nav-right { display: flex; align-items: center; gap: 10px; }
-    .avatar { width: 32px; height: 32px; border-radius: 50%; background: #1e2d3a; border: 1px solid #4dd9e0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #4dd9e0; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: #1e2d3a; border: 1px solid #4dd9e0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #4dd9e0; overflow: hidden; flex-shrink: 0;}
     .logout-btn { font-size: 12px; color: #5a7080; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s; }
     .logout-btn:hover { color: #f09595; }
     .page-header { margin-bottom: 1.5rem; }
@@ -101,7 +101,16 @@
   const userId = localStorage.getItem('userId');
   const username = localStorage.getItem('username');
   if (!userId || !username) window.location.href = 'login.html';
-  $('#nav-avatar').text(username.substring(0, 2).toUpperCase());
+  function initNavAvatar() {
+  const pic = localStorage.getItem('profilePicture');
+  const $nav = $('#nav-avatar');
+  if (pic) {
+    $nav.html(`<img src="${pic}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`);
+  } else {
+    $nav.text(username.substring(0, 2).toUpperCase());
+  }
+}
+initNavAvatar();
 
   const storeIcon = L.divIcon({ className: '', html: '<div style="width:14px;height:14px;background:#4dd9e0;border-radius:50%;border:2px solid #0a0f14;box-shadow:0 0 0 2px #4dd9e0;"></div>', iconSize: [14,14], iconAnchor: [7,7] });
   const userIcon = L.divIcon({ className: '', html: '<div style="width:14px;height:14px;background:#c8f0f0;border-radius:50%;border:2px solid #0a0f14;box-shadow:0 0 0 2px #c8f0f0;"></div>', iconSize: [14,14], iconAnchor: [7,7] });
@@ -165,7 +174,12 @@
   }
 
   $('#store-name').on('keypress', function(e) { if (e.key === 'Enter') submitStore(); });
-  function handleLogout() { localStorage.removeItem('userId'); localStorage.removeItem('username'); window.location.href = 'login.html'; }
+  function handleLogout() { 
+  localStorage.removeItem('userId'); 
+  localStorage.removeItem('username'); 
+  localStorage.removeItem('profilePicture');
+  window.location.href = 'login.html'; 
+}
   loadStores();
 </script>
 </body>
