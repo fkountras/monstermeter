@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MonsterMeter – Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    html { background: #0d1318; height: 100%; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0f14; min-height: 100%; font-family: 'Inter', sans-serif; color: #c8f0f0; padding: 1.5rem 1rem 5rem; }
+
+    /* ── Nav ── */
+    nav.top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 0.5px solid #1e2d3a; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: #c8f0f0; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .avatar-sm { width: 32px; height: 32px; border-radius: 50%; background: #1e2d3a; border: 1px solid #4dd9e0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #4dd9e0; overflow: hidden; flex-shrink: 0; }
+    .avatar-sm img { width: 100%; height: 100%; object-fit: cover; }
+    .logout-btn { font-size: 12px; color: #5a7080; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s; }
+    .logout-btn:hover { color: #f09595; }
+    .desktop-nav { display: flex; gap: 1.5rem; align-items: center; }
+    .desktop-nav a { font-size: 13px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .desktop-nav a:hover, .desktop-nav a.active { color: #4dd9e0; }
+
+    /* ── Profile hero ── */
+    .profile-hero { display: flex; flex-direction: column; align-items: center; padding: 2rem 0; margin-bottom: 2rem; }
+    .profile-avatar-wrap { position: relative; margin-bottom: 1rem; }
+    .profile-avatar { width: 96px; height: 96px; border-radius: 50%; background: #1e2d3a; border: 2px solid #4dd9e0; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #4dd9e0; overflow: hidden; }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .upload-btn { position: absolute; bottom: 0; right: 0; width: 28px; height: 28px; border-radius: 50%; background: #4dd9e0; border: 2px solid #0a0f14; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: background 0.2s; }
+    .upload-btn:hover { background: #c8f0f0; }
+    #photo-input { display: none; }
+    .profile-username { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: #c8f0f0; margin-bottom: 4px; }
+    .profile-email { font-size: 13px; color: #5a7080; }
+    .profile-joined { font-size: 12px; color: #2a3d4a; margin-top: 4px; }
+
+    /* ── Upload progress ── */
+    .upload-status { font-size: 12px; color: #4dd9e0; margin-top: 8px; display: none; }
+
+    /* ── Stats ── */
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
+    .stat-card { background: #111820; border: 0.5px solid #1e2d3a; border-radius: 12px; padding: 1rem; text-align: center; }
+    .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: #4dd9e0; line-height: 1; }
+    .stat-label { font-size: 11px; color: #5a7080; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+    /* ── Info card ── */
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: #c8f0f0; margin-bottom: 1rem; }
+    .info-card { background: #111820; border: 0.5px solid #1e2d3a; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 0.5px solid #1e2d3a; }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { font-size: 12px; color: #5a7080; letter-spacing: 0.5px; }
+    .info-value { font-size: 14px; color: #c8f0f0; }
+
+    /* ── Buttons ── */
+    .btn-danger { width: 100%; padding: 11px; background: transparent; border: 0.5px solid #a32d2d; border-radius: 8px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1.5px; color: #f09595; cursor: pointer; transition: all 0.2s; }
+    .btn-danger:hover { background: rgba(162,45,45,0.15); }
+
+    /* ── Messages ── */
+    .success-msg { background: rgba(13,110,86,0.15); border: 0.5px solid #0f6e56; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #5dcaa5; margin-bottom: 1rem; display: none; }
+    .error-msg { background: rgba(162,45,45,0.15); border: 0.5px solid #a32d2d; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #f09595; margin-bottom: 1rem; display: none; }
+
+    /* ── Bottom nav ── */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0d1318; border-top: 0.5px solid #1e2d3a; display: flex; justify-content: space-around; padding: 0.6rem 0 calc(0.8rem + env(safe-area-inset-bottom)); z-index: 100; }
+    .bottom-nav::after { content: ''; position: fixed; bottom: 0; left: 0; right: 0; height: env(safe-area-inset-bottom); background: #0d1318; z-index: 99; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .bottom-nav a.active { color: #4dd9e0; }
+    .bottom-nav .icon { font-size: 20px; }
+
+    @media (max-width: 600px) { .desktop-nav { display: none; } }
+    @media (min-width: 601px) { .bottom-nav { display: none; } body { padding-bottom: 1.5rem; } }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-logo" href="dashboard.html">MonsterMeter</a>
+  <div class="desktop-nav">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="log.html">Log drink</a>
+    <a href="friends.html">Friends</a>
+    <a href="map.html">Map</a>
+    <a href="profile.html" class="active">Profile</a>
+  </div>
+  <div class="nav-right">
+    <div class="avatar-sm" id="nav-avatar">--</div>
+    <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+  </div>
+</nav>
+
+<div class="success-msg" id="success-msg"></div>
+<div class="error-msg" id="error-msg"></div>
+
+<div class="profile-hero">
+  <div class="profile-avatar-wrap">
+    <div class="profile-avatar" id="profile-avatar">--</div>
+    <div class="upload-btn" onclick="$('#photo-input').click()">📷</div>
+    <input type="file" id="photo-input" accept="image/*" onchange="handlePhotoUpload(this)" />
+  </div>
+  <div class="upload-status" id="upload-status">Uploading...</div>
+  <div class="profile-username" id="profile-username">--</div>
+  <div class="profile-email" id="profile-email">--</div>
+  <div class="profile-joined" id="profile-joined">--</div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-value" id="stat-cans">--</div><div class="stat-label">Cans</div></div>
+  <div class="stat-card"><div class="stat-value" id="stat-week">--</div><div class="stat-label">This week</div></div>
+  <div class="stat-card"><div class="stat-value" id="stat-friends">--</div><div class="stat-label">Friends</div></div>
+</div>
+
+<div class="section-title">Account info</div>
+<div class="info-card">
+  <div class="info-row"><span class="info-label">Username</span><span class="info-value" id="info-username">--</span></div>
+  <div class="info-row"><span class="info-label">Email</span><span class="info-value" id="info-email">--</span></div>
+  <div class="info-row"><span class="info-label">Member since</span><span class="info-value" id="info-joined">--</span></div>
+</div>
+
+<div class="section-title">Account</div>
+<button class="btn-danger" onclick="handleLogout()">Sign out</button>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html"><span class="icon">🏠</span>Home</a>
+  <a href="log.html"><span class="icon">🥤</span>Log</a>
+  <a href="friends.html"><span class="icon">👥</span>Friends</a>
+  <a href="map.html"><span class="icon">📍</span>Map</a>
+  <a href="profile.html" class="active"><span class="icon">👤</span>Profile</a>
+</nav>
+
+<script>
+  const API_BASE = 'https://monstermeter-production.up.railway.app/api';
+  const CLOUDINARY_CLOUD = 'dgfnqtjmz';
+  const CLOUDINARY_PRESET = 'monstermeter_profiles';
+
+  // ── Auth guard ──
+  const userId   = localStorage.getItem('userId');
+  const username = localStorage.getItem('username');
+  if (!userId || !username) window.location.href = 'login.html';
+
+  // ── Set avatar initials in nav ──
+  function setAvatar(profilePicUrl) {
+    const $nav = $('#nav-avatar');
+    if (profilePicUrl) {
+      $nav.html(`<img src="${profilePicUrl}" alt="avatar" />`);
+    } else {
+      $nav.text(username.substring(0, 2).toUpperCase());
+    }
+  }
+
+  // ── Set profile avatar ──
+  function setProfileAvatar(profilePicUrl) {
+    const $avatar = $('#profile-avatar');
+    if (profilePicUrl) {
+      $avatar.html(`<img src="${profilePicUrl}" alt="profile" />`);
+    } else {
+      $avatar.text(username.substring(0, 2).toUpperCase());
+    }
+  }
+
+  // ── Load user profile ──
+  function loadProfile() {
+    $.ajax({
+      url: API_BASE + '/users/' + userId, method: 'GET',
+      success: function(user) {
+        const joined = new Date(user.createdAt).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+        $('#profile-username').text(user.username);
+        $('#profile-email').text(user.email);
+        $('#profile-joined').text('Joined ' + joined);
+        $('#info-username').text(user.username);
+        $('#info-email').text(user.email);
+        $('#info-joined').text(joined);
+        setAvatar(user.profilePicture);
+        setProfileAvatar(user.profilePicture);
+      },
+      error: function() { $('#error-msg').text('Could not load profile.').show(); }
+    });
+  }
+
+  // ── Load stats ──
+  function loadStats() {
+    $.ajax({
+      url: API_BASE + '/logs/user/' + userId, method: 'GET',
+      success: function(logs) {
+        $('#stat-cans').text(logs.length);
+        const oneWeekAgo = new Date(); oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        $('#stat-week').text(logs.filter(l => new Date(l.loggedAt) > oneWeekAgo).length);
+      }
+    });
+    $.ajax({
+      url: API_BASE + '/friendships/friends/' + userId, method: 'GET',
+      success: function(friends) { $('#stat-friends').text(friends.length); }
+    });
+  }
+
+  // ── Upload photo to Cloudinary ──
+  function handlePhotoUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    $('#upload-status').text('Uploading...').show();
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_PRESET);
+
+    $.ajax({
+      url: `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,
+      method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        const imageUrl = response.secure_url;
+        // Save URL to backend
+        $.ajax({
+          url: API_BASE + '/users/' + userId + '/profile-picture',
+          method: 'PATCH',
+          contentType: 'application/json',
+          data: JSON.stringify({ profilePicture: imageUrl }),
+          success: function() {
+            setAvatar(imageUrl);
+            setProfileAvatar(imageUrl);
+            $('#upload-status').hide();
+            $('#success-msg').text('Profile picture updated!').show();
+            setTimeout(() => $('#success-msg').hide(), 3000);
+          },
+          error: function() {
+            $('#upload-status').hide();
+            $('#error-msg').text('Photo uploaded but could not save. Try again.').show();
+          }
+        });
+      },
+      error: function() {
+        $('#upload-status').hide();
+        $('#error-msg').text('Upload failed. Please try again.').show();
+        setTimeout(() => $('#error-msg').hide(), 3000);
+      }
+    });
+  }
+
+  // ── Logout ──
+  function handleLogout() {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    window.location.href = 'login.html';
+  }
+
+  // ── Init ──
+  loadProfile();
+  loadStats();
+</script>
+
+</body>
+</html>
