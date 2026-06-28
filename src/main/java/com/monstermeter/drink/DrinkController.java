@@ -42,4 +42,14 @@ public class DrinkController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Drink> updateDrink(@PathVariable Long id, @RequestBody Drink drink) {
+        return ResponseEntity.ok(drinkService.updateDrink(id, drink));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Drink> patchDrink(@PathVariable Long id, @RequestBody Drink drink) {
+        return ResponseEntity.ok(drinkService.patchDrink(id, drink));
+    }
+
 }

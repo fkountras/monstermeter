@@ -34,4 +34,34 @@ public class DrinkService {
     public void deleteDrink(Long id) {
         drinkRepository.deleteById(id);
     }
+
+    public Drink updateDrink(Long id, Drink updated) {
+        Drink drink = drinkRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Drink not found by id: " + id));
+        drink.setName(updated.getName());
+        drink.setBrand(updated.getBrand());
+        drink.setCaffeine(updated.getCaffeine());
+        drink.setCalories(updated.getCalories());
+        drink.setFlavour(updated.getFlavour());
+        drink.setVolumeMl(updated.getVolumeMl());
+        return drinkRepository.save(drink);
+    }
+
+    public Drink patchDrink(Long id, Drink updated) {
+        Drink drink = drinkRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Drink not found by id: " + id));
+        if (updated.getName() != null)
+            drink.setName(updated.getName());
+        if (updated.getBrand() != null)
+            drink.setBrand(updated.getBrand());
+        if (updated.getCaffeine() != null)
+            drink.setCaffeine(updated.getCaffeine());
+        if (updated.getCalories() != null)
+            drink.setCalories(updated.getCalories());
+        if (updated.getFlavour() != null)
+            drink.setFlavour(updated.getFlavour());
+        if (updated.getVolumeMl() != null)
+            drink.setVolumeMl(updated.getVolumeMl());
+        return drinkRepository.save(drink);
+    }
 }
