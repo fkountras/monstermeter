@@ -10,174 +10,68 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: #0a0f14;
-      min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      color: #c8f0f0;
-      padding: 1.5rem 1rem;
-    }
-
-    /* ── Nav ── */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 0.5px solid #1e2d3a;
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 24px; letter-spacing: 3px; color: #c8f0f0;
-      text-decoration: none;
-    }
-    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
-    .nav-links a {
-      font-size: 13px; color: #5a7080;
-      text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s;
-    }
-    .nav-links a:hover,
-    .nav-links a.active { color: #4dd9e0; }
-    .nav-user { display: flex; align-items: center; gap: 10px; }
-    .avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #1e2d3a; border: 1px solid #4dd9e0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 500; color: #4dd9e0;
-    }
-    .logout-btn {
-      font-size: 12px; color: #5a7080; background: none;
-      border: none; cursor: pointer; font-family: 'Inter', sans-serif;
-      transition: color 0.2s;
-    }
+    body { background: #0a0f14; min-height: 100vh; font-family: 'Inter', sans-serif; color: #c8f0f0; padding: 1.5rem 1rem 5rem; }
+    nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 0.5px solid #1e2d3a; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: #c8f0f0; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: #1e2d3a; border: 1px solid #4dd9e0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #4dd9e0; }
+    .logout-btn { font-size: 12px; color: #5a7080; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s; }
     .logout-btn:hover { color: #f09595; }
-
-    /* ── Page header ── */
     .page-header { margin-bottom: 1.5rem; }
-    .page-header h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 36px; letter-spacing: 2px; color: #c8f0f0; line-height: 1;
-    }
+    .page-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: #c8f0f0; line-height: 1; }
     .page-header p { font-size: 13px; color: #5a7080; margin-top: 6px; }
-
-    /* ── Hint ── */
-    .hint {
-      background: #111820;
-      border: 0.5px solid #1e2d3a;
-      border-left: 2px solid #4dd9e0;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px; color: #5a7080;
-      margin-bottom: 1rem;
-    }
-
-    /* ── Map ── */
-    #map {
-      width: 100%;
-      height: 460px;
-      border-radius: 12px;
-      border: 0.5px solid #1e2d3a;
-      margin-bottom: 1.5rem;
-    }
-
-    /* ── Add form ── */
-    .add-form {
-      background: #111820;
-      border: 0.5px solid #1e2d3a;
-      border-radius: 12px;
-      padding: 1.25rem;
-      display: none;
-      margin-bottom: 1.5rem;
-    }
+    .hint { background: #111820; border: 0.5px solid #1e2d3a; border-left: 2px solid #4dd9e0; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #5a7080; margin-bottom: 1rem; }
+    #map { width: 100%; height: 460px; border-radius: 12px; border: 0.5px solid #1e2d3a; margin-bottom: 1.5rem; }
+    .add-form { background: #111820; border: 0.5px solid #1e2d3a; border-radius: 12px; padding: 1.25rem; display: none; margin-bottom: 1.5rem; }
     .add-form.visible { display: block; }
-    .add-form h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 18px; letter-spacing: 1.5px; color: #c8f0f0;
-      margin-bottom: 1rem;
-    }
-    .form-row { display: flex; gap: 8px; align-items: flex-end; }
-    .form-group { flex: 1; }
-    .form-group label {
-      display: block; font-size: 11px; color: #5a7080;
-      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
-    }
-    .form-group input {
-      width: 100%; background: #0a0f14;
-      border: 0.5px solid #1e2d3a; border-radius: 8px;
-      padding: 9px 12px; font-size: 13px; color: #c8f0f0;
-      font-family: 'Inter', sans-serif; outline: none;
-      transition: border-color 0.2s;
-    }
+    .add-form h3 { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1.5px; color: #c8f0f0; margin-bottom: 1rem; }
+    .form-row { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; }
+    .form-group { flex: 1; min-width: 160px; }
+    .form-group label { display: block; font-size: 11px; color: #5a7080; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+    .form-group input { width: 100%; background: #0a0f14; border: 0.5px solid #1e2d3a; border-radius: 8px; padding: 9px 12px; font-size: 13px; color: #c8f0f0; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
     .form-group input:focus { border-color: #4dd9e0; }
     .form-group input::placeholder { color: #2a3d4a; }
-
-    /* ── Buttons ── */
-    .btn-primary {
-      padding: 9px 20px;
-      background: #4dd9e0; color: #0a0f14;
-      border: none; border-radius: 8px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 15px; letter-spacing: 1.5px;
-      cursor: pointer; transition: background 0.2s; white-space: nowrap;
-    }
+    .btn-primary { padding: 9px 20px; background: #4dd9e0; color: #0a0f14; border: none; border-radius: 8px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1.5px; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
     .btn-primary:hover { background: #c8f0f0; }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-cancel {
-      padding: 9px 16px;
-      background: transparent; color: #5a7080;
-      border: 0.5px solid #1e2d3a; border-radius: 8px;
-      font-size: 13px; cursor: pointer;
-      font-family: 'Inter', sans-serif; transition: color 0.2s;
-    }
+    .btn-cancel { padding: 9px 16px; background: transparent; color: #5a7080; border: 0.5px solid #1e2d3a; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s; }
     .btn-cancel:hover { color: #c8f0f0; }
-
-    /* ── Coords ── */
     .coords-display { font-size: 11px; color: #5a7080; margin-top: 8px; }
     .coords-display span { color: #4dd9e0; }
-
-    /* ── Messages ── */
-    .error-msg {
-      background: rgba(162, 45, 45, 0.15);
-      border: 0.5px solid #a32d2d; border-radius: 8px;
-      padding: 10px 14px; font-size: 13px; color: #f09595;
-      margin-bottom: 1rem; display: none;
-    }
-    .success-msg {
-      background: rgba(13, 110, 86, 0.15);
-      border: 0.5px solid #0f6e56; border-radius: 8px;
-      padding: 10px 14px; font-size: 13px; color: #5dcaa5;
-      margin-bottom: 1rem; display: none;
-    }
+    .error-msg { background: rgba(162,45,45,0.15); border: 0.5px solid #a32d2d; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #f09595; margin-bottom: 1rem; display: none; }
+    .success-msg { background: rgba(13,110,86,0.15); border: 0.5px solid #0f6e56; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #5dcaa5; margin-bottom: 1rem; display: none; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0d1318; border-top: 0.5px solid #1e2d3a; display: flex; justify-content: space-around; padding: 0.6rem 0 0.8rem; z-index: 100; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .bottom-nav a.active { color: #4dd9e0; }
+    .bottom-nav .icon { font-size: 20px; }
+    .desktop-nav { display: flex; gap: 1.5rem; align-items: center; }
+    .desktop-nav a { font-size: 13px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .desktop-nav a:hover, .desktop-nav a.active { color: #4dd9e0; }
+    @media (max-width: 600px) { .desktop-nav { display: none; } .page-header h1 { font-size: 28px; } #map { height: 350px; } }
+    @media (min-width: 601px) { .bottom-nav { display: none; } body { padding-bottom: 1.5rem; } }
   </style>
 </head>
 <body>
-
 <nav>
   <a class="nav-logo" href="dashboard.html">MonsterMeter</a>
-  <div class="nav-links">
+  <div class="desktop-nav">
     <a href="dashboard.html">Dashboard</a>
     <a href="log.html">Log drink</a>
     <a href="friends.html">Friends</a>
     <a href="map.html" class="active">Map</a>
   </div>
-  <div class="nav-user">
+  <div class="nav-right">
     <div class="avatar" id="nav-avatar">--</div>
     <button class="logout-btn" onclick="handleLogout()">Sign out</button>
   </div>
 </nav>
 
-<div class="page-header">
-  <h1>Store map</h1>
-  <p>Find White Monster near you</p>
-</div>
+<div class="page-header"><h1>Store map</h1><p>Find White Monster near you</p></div>
 
 <div class="error-msg" id="error-msg"></div>
 <div class="success-msg" id="success-msg"></div>
 
-<div class="hint">Click anywhere on the map to add a store location.</div>
-
+<div class="hint">Tap anywhere on the map to add a store location.</div>
 <div id="map"></div>
 
 <div class="add-form" id="add-form">
@@ -193,158 +87,84 @@
   <div class="coords-display" id="coords-display"></div>
 </div>
 
+<nav class="bottom-nav">
+  <a href="dashboard.html"><span class="icon">🏠</span>Home</a>
+  <a href="log.html"><span class="icon">🥤</span>Log</a>
+  <a href="friends.html"><span class="icon">👥</span>Friends</a>
+  <a href="map.html" class="active"><span class="icon">📍</span>Map</a>
+</nav>
+
 <script>
   const API_BASE = 'https://monstermeter-production.up.railway.app/api';
-
-  // ── Auth guard ──
-  const userId   = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
   const username = localStorage.getItem('username');
   if (!userId || !username) window.location.href = 'login.html';
-
   $('#nav-avatar').text(username.substring(0, 2).toUpperCase());
 
-  // ── Custom marker icon ──
-  const storeIcon = L.divIcon({
-    className: '',
-    html: '<div style="width:14px;height:14px;background:#4dd9e0;border-radius:50%;border:2px solid #0a0f14;box-shadow:0 0 0 2px #4dd9e0;"></div>',
-    iconSize: [14, 14],
-    iconAnchor: [7, 7]
-  });
+  const storeIcon = L.divIcon({ className: '', html: '<div style="width:14px;height:14px;background:#4dd9e0;border-radius:50%;border:2px solid #0a0f14;box-shadow:0 0 0 2px #4dd9e0;"></div>', iconSize: [14,14], iconAnchor: [7,7] });
+  const userIcon = L.divIcon({ className: '', html: '<div style="width:14px;height:14px;background:#c8f0f0;border-radius:50%;border:2px solid #0a0f14;box-shadow:0 0 0 2px #c8f0f0;"></div>', iconSize: [14,14], iconAnchor: [7,7] });
 
-  const userIcon = L.divIcon({
-    className: '',
-    html: '<div style="width:14px;height:14px;background:#c8f0f0;border-radius:50%;border:2px solid #0a0f14;box-shadow:0 0 0 2px #c8f0f0;"></div>',
-    iconSize: [14, 14],
-    iconAnchor: [7, 7]
-  });
+  const map = L.map('map').setView([47.3769, 8.5417], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
 
-  // ── Init map — default to Zürich, then try geolocation ──
-  const defaultLat = 47.3769;
-  const defaultLng = 8.5417;
-  const map = L.map('map').setView([defaultLat, defaultLng], 13);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
-
-  // Try to center on user's location
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       function(position) {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        map.setView([lat, lng], 14);
-        L.marker([lat, lng], { icon: userIcon })
-          .addTo(map)
-          .bindPopup('<b style="font-family:sans-serif;font-size:13px;">You are here</b>')
-          .openPopup();
+        map.setView([position.coords.latitude, position.coords.longitude], 14);
+        L.marker([position.coords.latitude, position.coords.longitude], { icon: userIcon }).addTo(map).bindPopup('<b style="font-family:sans-serif;font-size:13px;">You are here</b>').openPopup();
       },
-      function() {
-        // Permission denied or unavailable — stay on Zürich
-        console.log('Geolocation unavailable, defaulting to Zürich.');
-      }
+      function() { console.log('Geolocation unavailable, defaulting to Zürich.'); }
     );
   }
 
-  // ── Load existing store locations from API ──
   function loadStores() {
     $.ajax({
-      url: API_BASE + '/stores',
-      method: 'GET',
+      url: API_BASE + '/stores', method: 'GET',
       success: function(stores) {
         stores.forEach(function(store) {
-          L.marker([store.latitude, store.longitude], { icon: storeIcon })
-            .addTo(map)
-            .bindPopup(`<b style="font-family:sans-serif;font-size:13px;">${store.name}</b>`);
+          L.marker([store.latitude, store.longitude], { icon: storeIcon }).addTo(map).bindPopup(`<b style="font-family:sans-serif;font-size:13px;">${store.name}</b>`);
         });
       },
-      error: function() {
-        $('#error-msg').text('Could not load store locations.').show();
-        setTimeout(() => $('#error-msg').hide(), 3000);
-      }
+      error: function() { $('#error-msg').text('Could not load store locations.').show(); setTimeout(() => $('#error-msg').hide(), 3000); }
     });
   }
 
-  // ── Click map to add store ──
-  let pendingLat = null;
-  let pendingLng = null;
-  let tempMarker = null;
+  let pendingLat = null, pendingLng = null, tempMarker = null;
 
   map.on('click', function(e) {
-    pendingLat = e.latlng.lat.toFixed(6);
-    pendingLng = e.latlng.lng.toFixed(6);
-
+    pendingLat = e.latlng.lat.toFixed(6); pendingLng = e.latlng.lng.toFixed(6);
     if (tempMarker) map.removeLayer(tempMarker);
     tempMarker = L.marker([pendingLat, pendingLng], { icon: storeIcon }).addTo(map);
-
     $('#coords-display').html(`Coordinates: <span>${pendingLat}, ${pendingLng}</span>`);
-    $('#add-form').addClass('visible');
-    $('#store-name').val('').focus();
+    $('#add-form').addClass('visible'); $('#store-name').val('').focus();
   });
 
-  // ── Submit new store ──
   function submitStore() {
     const name = $('#store-name').val().trim();
     if (!name) { $('#store-name').focus(); return; }
-
     $('#save-btn').prop('disabled', true).text('Saving...');
-
     $.ajax({
-      url: API_BASE + '/stores',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        name: name,
-        latitude: parseFloat(pendingLat),
-        longitude: parseFloat(pendingLng),
-        addedByUserId: parseInt(userId)
-      }),
+      url: API_BASE + '/stores', method: 'POST', contentType: 'application/json',
+      data: JSON.stringify({ name: name, latitude: parseFloat(pendingLat), longitude: parseFloat(pendingLng), addedByUserId: parseInt(userId) }),
       success: function(store) {
-        // Replace temp marker with permanent one
-        if (tempMarker) map.removeLayer(tempMarker);
-        tempMarker = null;
-        L.marker([store.latitude, store.longitude], { icon: storeIcon })
-          .addTo(map)
-          .bindPopup(`<b style="font-family:sans-serif;font-size:13px;">${store.name}</b>`)
-          .openPopup();
-
-        $('#success-msg').text('Store added to the map!').show();
-        setTimeout(() => $('#success-msg').hide(), 3000);
-        cancelAdd();
-        $('#save-btn').prop('disabled', false).text('Save pin');
+        if (tempMarker) map.removeLayer(tempMarker); tempMarker = null;
+        L.marker([store.latitude, store.longitude], { icon: storeIcon }).addTo(map).bindPopup(`<b style="font-family:sans-serif;font-size:13px;">${store.name}</b>`).openPopup();
+        $('#success-msg').text('Store added to the map!').show(); setTimeout(() => $('#success-msg').hide(), 3000);
+        cancelAdd(); $('#save-btn').prop('disabled', false).text('Save pin');
       },
-      error: function() {
-        $('#error-msg').text('Could not save store. Please try again.').show();
-        setTimeout(() => $('#error-msg').hide(), 3000);
-        $('#save-btn').prop('disabled', false).text('Save pin');
-      }
+      error: function() { $('#error-msg').text('Could not save store.').show(); setTimeout(() => $('#error-msg').hide(), 3000); $('#save-btn').prop('disabled', false).text('Save pin'); }
     });
   }
 
-  // ── Cancel add ──
   function cancelAdd() {
     if (tempMarker) { map.removeLayer(tempMarker); tempMarker = null; }
-    $('#add-form').removeClass('visible');
-    $('#store-name').val('');
-    pendingLat = null;
-    pendingLng = null;
+    $('#add-form').removeClass('visible'); $('#store-name').val('');
+    pendingLat = null; pendingLng = null;
   }
 
-  // ── Enter key to save ──
-  $('#store-name').on('keypress', function(e) {
-    if (e.key === 'Enter') submitStore();
-  });
-
-  // ── Logout ──
-  function handleLogout() {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('username');
-    window.location.href = 'login.html';
-  }
-
-  // ── Init ──
+  $('#store-name').on('keypress', function(e) { if (e.key === 'Enter') submitStore(); });
+  function handleLogout() { localStorage.removeItem('userId'); localStorage.removeItem('username'); window.location.href = 'login.html'; }
   loadStores();
 </script>
-
 </body>
 </html>

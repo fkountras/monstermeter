@@ -8,7 +8,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background: #0a0f14;
       min-height: 100vh;
@@ -18,171 +17,73 @@
       font-family: 'Inter', sans-serif;
       padding: 2rem 1rem;
     }
-
-    .container {
-      width: 100%;
-      max-width: 420px;
-    }
-
-    /* ── Logo ── */
-    .logo {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
+    .container { width: 100%; max-width: 420px; }
+    .logo { text-align: center; margin-bottom: 2.5rem; }
     .logo-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 48px;
-      letter-spacing: 4px;
-      color: #c8f0f0;
-      line-height: 1;
+      font-size: 48px; letter-spacing: 4px; color: #c8f0f0; line-height: 1;
     }
-    .logo-line {
-      width: 40px;
-      height: 2px;
-      background: #4dd9e0;
-      margin: 10px auto 0;
-    }
-    .logo-sub {
-      font-size: 12px;
-      color: #5a7080;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-top: 8px;
-    }
-
-    /* ── Card ── */
-    .card {
-      background: #111820;
-      border: 0.5px solid #1e2d3a;
-      border-radius: 16px;
-      padding: 2rem;
-    }
-
-    /* ── Tabs ── */
+    .logo-line { width: 40px; height: 2px; background: #4dd9e0; margin: 10px auto 0; }
+    .logo-sub { font-size: 12px; color: #5a7080; letter-spacing: 3px; text-transform: uppercase; margin-top: 8px; }
+    .card { background: #111820; border: 0.5px solid #1e2d3a; border-radius: 16px; padding: 2rem; }
     .tabs {
-      display: flex;
-      background: #0a0f14;
-      border-radius: 10px;
-      padding: 4px;
-      margin-bottom: 1.75rem;
-      border: 0.5px solid #1e2d3a;
+      display: flex; background: #0a0f14; border-radius: 10px;
+      padding: 4px; margin-bottom: 1.75rem; border: 0.5px solid #1e2d3a;
     }
     .tab {
-      flex: 1;
-      padding: 8px;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 500;
-      color: #5a7080;
-      cursor: pointer;
-      border-radius: 7px;
-      border: none;
-      background: transparent;
-      font-family: 'Inter', sans-serif;
-      letter-spacing: 0.5px;
-      transition: all 0.2s;
+      flex: 1; padding: 8px; text-align: center; font-size: 13px; font-weight: 500;
+      color: #5a7080; cursor: pointer; border-radius: 7px; border: none;
+      background: transparent; font-family: 'Inter', sans-serif; letter-spacing: 0.5px; transition: all 0.2s;
     }
-    .tab.active {
-      background: #4dd9e0;
-      color: #0a0f14;
-    }
-
-    /* ── Form ── */
+    .tab.active { background: #4dd9e0; color: #0a0f14; }
     .panel { display: none; }
     .panel.active { display: block; }
-
     .form-group { margin-bottom: 1rem; }
     .form-group label {
-      display: block;
-      font-size: 12px;
-      color: #5a7080;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 6px;
+      display: block; font-size: 12px; color: #5a7080;
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;
     }
     .form-group input {
-      width: 100%;
-      background: #0a0f14;
-      border: 0.5px solid #1e2d3a;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 14px;
-      color: #c8f0f0;
-      font-family: 'Inter', sans-serif;
-      outline: none;
-      transition: border-color 0.2s;
+      width: 100%; background: #0a0f14; border: 0.5px solid #1e2d3a;
+      border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #c8f0f0;
+      font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s;
     }
     .form-group input:focus { border-color: #4dd9e0; }
     .form-group input::placeholder { color: #2a3d4a; }
-
-    /* ── Button ── */
     .btn-primary {
-      width: 100%;
-      padding: 12px;
-      background: #4dd9e0;
-      color: #0a0f14;
-      border: none;
-      border-radius: 8px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 18px;
-      letter-spacing: 2px;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: background 0.2s;
+      width: 100%; padding: 12px; background: #4dd9e0; color: #0a0f14;
+      border: none; border-radius: 8px; font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px; letter-spacing: 2px; cursor: pointer; margin-top: 0.5rem; transition: background 0.2s;
     }
     .btn-primary:hover { background: #c8f0f0; }
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    /* ── Messages ── */
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
     .error-msg {
-      background: rgba(162, 45, 45, 0.15);
-      border: 0.5px solid #a32d2d;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      color: #f09595;
-      margin-bottom: 1rem;
-      display: none;
+      background: rgba(162,45,45,0.15); border: 0.5px solid #a32d2d;
+      border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #f09595; margin-bottom: 1rem; display: none;
     }
     .success-msg {
-      background: rgba(13, 110, 86, 0.15);
-      border: 0.5px solid #0f6e56;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      color: #5dcaa5;
-      margin-bottom: 1rem;
-      display: none;
+      background: rgba(13,110,86,0.15); border: 0.5px solid #0f6e56;
+      border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #5dcaa5; margin-bottom: 1rem; display: none;
     }
-
-    .footer-note {
-      text-align: center;
-      font-size: 12px;
-      color: #2a3d4a;
-      margin-top: 1.5rem;
+    .footer-note { text-align: center; font-size: 12px; color: #2a3d4a; margin-top: 1.5rem; }
+    @media (max-width: 480px) {
+      .logo-title { font-size: 38px; }
+      .card { padding: 1.5rem; }
     }
   </style>
 </head>
 <body>
-
 <div class="container">
-
   <div class="logo">
     <div class="logo-title">MonsterMeter</div>
     <div class="logo-line"></div>
     <div class="logo-sub">Track. Compare. Conquer.</div>
   </div>
-
   <div class="card">
     <div class="tabs">
       <button class="tab active" id="tab-login" onclick="switchTab('login')">Sign in</button>
       <button class="tab" id="tab-register" onclick="switchTab('register')">Create account</button>
     </div>
-
-    <!-- Login form -->
     <div id="login" class="panel active">
       <div class="error-msg" id="login-error"></div>
       <div class="form-group">
@@ -195,8 +96,6 @@
       </div>
       <button class="btn-primary" id="login-btn" onclick="handleLogin()">Sign in</button>
     </div>
-
-    <!-- Register form -->
     <div id="register" class="panel">
       <div class="error-msg" id="register-error"></div>
       <div class="success-msg" id="register-success">Account created! You can now sign in.</div>
@@ -219,106 +118,64 @@
       <button class="btn-primary" id="register-btn" onclick="handleRegister()">Create account</button>
     </div>
   </div>
-
   <div class="footer-note">MonsterMeter © 2026</div>
 </div>
-
 <script>
   const API_BASE = 'https://monstermeter-production.up.railway.app/api';
-
   function switchTab(tab) {
-    $('.tab').removeClass('active');
-    $('.panel').removeClass('active');
-    $('#' + tab).addClass('active');
-    $('#tab-' + tab).addClass('active');
+    $('.tab').removeClass('active'); $('.panel').removeClass('active');
+    $('#' + tab).addClass('active'); $('#tab-' + tab).addClass('active');
     $('.error-msg, .success-msg').hide();
   }
-
-  function showError(id, message) {
-    $('#' + id).text(message).show();
-  }
-
+  function showError(id, message) { $('#' + id).text(message).show(); }
   function handleLogin() {
     const username = $('#login-username').val().trim();
     const password = $('#login-password').val();
     $('#login-error').hide();
-
-    if (!username || !password) {
-      showError('login-error', 'Please fill in all fields.');
-      return;
-    }
-
+    if (!username || !password) { showError('login-error', 'Please fill in all fields.'); return; }
     $('#login-btn').prop('disabled', true).text('Signing in...');
-
     $.ajax({
-      url: API_BASE + '/users/login',
-      method: 'POST',
-      contentType: 'application/json',
+      url: API_BASE + '/users/login', method: 'POST', contentType: 'application/json',
       data: JSON.stringify({ username, password }),
-      success: function (response) {
-        // Store the logged-in user's ID for use across pages
+      success: function(response) {
         localStorage.setItem('userId', response.id);
         localStorage.setItem('username', response.username);
         window.location.href = 'dashboard.html';
       },
-      error: function (xhr) {
-        const msg = xhr.status === 401
-          ? 'Incorrect username or password.'
-          : 'Something went wrong. Please try again.';
+      error: function(xhr) {
+        const msg = xhr.status === 401 ? 'Incorrect username or password.' : 'Something went wrong. Please try again.';
         showError('login-error', msg);
         $('#login-btn').prop('disabled', false).text('Sign in');
       }
     });
   }
-
   function handleRegister() {
     const username = $('#reg-username').val().trim();
-    const email    = $('#reg-email').val().trim();
+    const email = $('#reg-email').val().trim();
     const password = $('#reg-password').val();
-    const confirm  = $('#reg-confirm').val();
-
-    $('#register-error').hide();
-    $('#register-success').hide();
-
-    if (!username || !email || !password || !confirm) {
-      showError('register-error', 'Please fill in all fields.');
-      return;
-    }
-    if (password !== confirm) {
-      showError('register-error', 'Passwords do not match.');
-      return;
-    }
-    if (password.length < 6) {
-      showError('register-error', 'Password must be at least 6 characters.');
-      return;
-    }
-
+    const confirm = $('#reg-confirm').val();
+    $('#register-error').hide(); $('#register-success').hide();
+    if (!username || !email || !password || !confirm) { showError('register-error', 'Please fill in all fields.'); return; }
+    if (password !== confirm) { showError('register-error', 'Passwords do not match.'); return; }
+    if (password.length < 6) { showError('register-error', 'Password must be at least 6 characters.'); return; }
     $('#register-btn').prop('disabled', true).text('Creating account...');
-
     $.ajax({
-      url: API_BASE + '/users/register',
-      method: 'POST',
-      contentType: 'application/json',
+      url: API_BASE + '/users/register', method: 'POST', contentType: 'application/json',
       data: JSON.stringify({ username, email, password }),
-      success: function () {
+      success: function() {
         $('#register-success').show();
         $('#reg-username, #reg-email, #reg-password, #reg-confirm').val('');
         $('#register-btn').prop('disabled', false).text('Create account');
-        // Switch to login after a short delay
         setTimeout(() => switchTab('login'), 1500);
       },
-      error: function (xhr) {
-        const msg = xhr.status === 409
-          ? 'Username or email already taken.'
-          : 'Registration failed. Please try again.';
+      error: function(xhr) {
+        const msg = xhr.status === 409 ? 'Username or email already taken.' : 'Registration failed. Please try again.';
         showError('register-error', msg);
         $('#register-btn').prop('disabled', false).text('Create account');
       }
     });
   }
-
-  // Allow pressing Enter to submit
-  $(document).on('keypress', 'input', function (e) {
+  $(document).on('keypress', 'input', function(e) {
     if (e.key === 'Enter') {
       const panel = $(this).closest('.panel').attr('id');
       if (panel === 'login') handleLogin();
@@ -326,6 +183,5 @@
     }
   });
 </script>
-
 </body>
 </html>

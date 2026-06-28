@@ -8,298 +8,133 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: #0a0f14;
-      min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      color: #c8f0f0;
-      padding: 1.5rem 1rem;
-    }
-
-    /* ── Nav ── */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 0.5px solid #1e2d3a;
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 24px;
-      letter-spacing: 3px;
-      color: #c8f0f0;
-      text-decoration: none;
-    }
-    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
-    .nav-links a {
-      font-size: 13px;
-      color: #5a7080;
-      text-decoration: none;
-      letter-spacing: 0.5px;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover,
-    .nav-links a.active { color: #4dd9e0; }
-    .nav-user { display: flex; align-items: center; gap: 10px; }
-    .avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #1e2d3a; border: 1px solid #4dd9e0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 500; color: #4dd9e0;
-    }
-    .logout-btn {
-      font-size: 12px; color: #5a7080; background: none;
-      border: none; cursor: pointer; letter-spacing: 0.5px;
-      font-family: 'Inter', sans-serif; transition: color 0.2s;
-    }
+    body { background: #0a0f14; min-height: 100vh; font-family: 'Inter', sans-serif; color: #c8f0f0; padding: 1.5rem 1rem 5rem; }
+    nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 0.5px solid #1e2d3a; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: #c8f0f0; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: #1e2d3a; border: 1px solid #4dd9e0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #4dd9e0; }
+    .logout-btn { font-size: 12px; color: #5a7080; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s; }
     .logout-btn:hover { color: #f09595; }
-
-    /* ── Page header ── */
-    .btn-back {
-      font-size: 13px; color: #5a7080; background: none;
-      border: none; cursor: pointer; margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: 6px; padding: 0;
-      font-family: 'Inter', sans-serif; transition: color 0.2s;
-    }
+    .btn-back { font-size: 13px; color: #5a7080; background: none; border: none; cursor: pointer; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 6px; padding: 0; font-family: 'Inter', sans-serif; transition: color 0.2s; }
     .btn-back:hover { color: #4dd9e0; }
     .page-header { margin-bottom: 2rem; }
-    .page-header h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 36px; letter-spacing: 2px; color: #c8f0f0; line-height: 1;
-    }
+    .page-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: #c8f0f0; line-height: 1; }
     .page-header p { font-size: 13px; color: #5a7080; margin-top: 6px; }
-
-    /* ── Card ── */
-    .card {
-      background: #111820;
-      border: 0.5px solid #1e2d3a;
-      border-radius: 16px;
-      padding: 2rem;
-      max-width: 480px;
-    }
-
-    /* ── Drink preview ── */
-    .drink-preview {
-      background: #0a0f14;
-      border: 0.5px solid #1e2d3a;
-      border-radius: 10px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 1.25rem;
-    }
-    .drink-icon {
-      font-size: 28px;
-      width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      background: #111820; border-radius: 8px;
-      border: 0.5px solid #1e2d3a; flex-shrink: 0;
-    }
+    .card { background: #111820; border: 0.5px solid #1e2d3a; border-radius: 16px; padding: 2rem; max-width: 480px; }
+    .drink-preview { background: #0a0f14; border: 0.5px solid #1e2d3a; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; }
+    .drink-icon { font-size: 28px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: #111820; border-radius: 8px; border: 0.5px solid #1e2d3a; flex-shrink: 0; }
     .drink-name { font-size: 15px; font-weight: 500; color: #c8f0f0; }
     .drink-label { font-size: 12px; color: #5a7080; margin-top: 2px; }
-
-    /* ── Form ── */
     .form-group { margin-bottom: 1.25rem; }
-    .form-group label {
-      display: block; font-size: 12px; color: #5a7080;
-      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
-    }
-    .form-group select {
-      width: 100%; background: #0a0f14;
-      border: 0.5px solid #1e2d3a; border-radius: 8px;
-      padding: 10px 14px; font-size: 14px; color: #c8f0f0;
-      font-family: 'Inter', sans-serif; outline: none;
-      transition: border-color 0.2s; appearance: none; cursor: pointer;
-    }
+    .form-group label { display: block; font-size: 12px; color: #5a7080; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .form-group select { width: 100%; background: #0a0f14; border: 0.5px solid #1e2d3a; border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #c8f0f0; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; appearance: none; cursor: pointer; }
     .form-group select:focus { border-color: #4dd9e0; }
-    .form-group textarea {
-      width: 100%; background: #0a0f14;
-      border: 0.5px solid #1e2d3a; border-radius: 8px;
-      padding: 10px 14px; font-size: 14px; color: #c8f0f0;
-      font-family: 'Inter', sans-serif; outline: none;
-      transition: border-color 0.2s; resize: vertical; min-height: 90px;
-    }
+    .form-group textarea { width: 100%; background: #0a0f14; border: 0.5px solid #1e2d3a; border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #c8f0f0; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; resize: vertical; min-height: 90px; }
     .form-group textarea:focus { border-color: #4dd9e0; }
     .form-group textarea::placeholder { color: #2a3d4a; }
-
-    /* ── Buttons ── */
-    .btn-primary {
-      width: 100%; padding: 12px;
-      background: #4dd9e0; color: #0a0f14;
-      border: none; border-radius: 8px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 18px; letter-spacing: 2px;
-      cursor: pointer; transition: background 0.2s;
-    }
+    .btn-primary { width: 100%; padding: 12px; background: #4dd9e0; color: #0a0f14; border: none; border-radius: 8px; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; cursor: pointer; transition: background 0.2s; }
     .btn-primary:hover { background: #c8f0f0; }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    /* ── Messages ── */
-    .success-msg {
-      background: rgba(13, 110, 86, 0.15);
-      border: 0.5px solid #0f6e56; border-radius: 8px;
-      padding: 10px 14px; font-size: 13px; color: #5dcaa5;
-      margin-bottom: 1rem; display: none;
-    }
-    .error-msg {
-      background: rgba(162, 45, 45, 0.15);
-      border: 0.5px solid #a32d2d; border-radius: 8px;
-      padding: 10px 14px; font-size: 13px; color: #f09595;
-      margin-bottom: 1rem; display: none;
-    }
-    .loading-text { font-size: 13px; color: #5a7080; padding: 8px 0; }
+    .success-msg { background: rgba(13,110,86,0.15); border: 0.5px solid #0f6e56; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #5dcaa5; margin-bottom: 1rem; display: none; }
+    .error-msg { background: rgba(162,45,45,0.15); border: 0.5px solid #a32d2d; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #f09595; margin-bottom: 1rem; display: none; }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0d1318; border-top: 0.5px solid #1e2d3a; display: flex; justify-content: space-around; padding: 0.6rem 0 0.8rem; z-index: 100; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .bottom-nav a.active { color: #4dd9e0; }
+    .bottom-nav .icon { font-size: 20px; }
+    .desktop-nav { display: flex; gap: 1.5rem; align-items: center; }
+    .desktop-nav a { font-size: 13px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .desktop-nav a:hover, .desktop-nav a.active { color: #4dd9e0; }
+    @media (max-width: 600px) { .desktop-nav { display: none; } .page-header h1 { font-size: 28px; } .card { padding: 1.25rem; } }
+    @media (min-width: 601px) { .bottom-nav { display: none; } body { padding-bottom: 1.5rem; } }
   </style>
 </head>
 <body>
-
 <nav>
   <a class="nav-logo" href="dashboard.html">MonsterMeter</a>
-  <div class="nav-links">
+  <div class="desktop-nav">
     <a href="dashboard.html">Dashboard</a>
     <a href="log.html" class="active">Log drink</a>
     <a href="friends.html">Friends</a>
     <a href="map.html">Map</a>
   </div>
-  <div class="nav-user">
+  <div class="nav-right">
     <div class="avatar" id="nav-avatar">--</div>
     <button class="logout-btn" onclick="handleLogout()">Sign out</button>
   </div>
 </nav>
 
-<button class="btn-back" onclick="window.location.href='dashboard.html'">← Back to dashboard</button>
-
-<div class="page-header">
-  <h1>Log a drink</h1>
-  <p>What are you cracking open?</p>
-</div>
+<button class="btn-back" onclick="window.location.href='dashboard.html'">← Back</button>
+<div class="page-header"><h1>Log a drink</h1><p>What are you cracking open?</p></div>
 
 <div class="card">
   <div class="success-msg" id="success-msg">Drink logged! 🥤 Redirecting...</div>
   <div class="error-msg" id="error-msg"></div>
-
-  <div class="drink-preview" id="drink-preview">
+  <div class="drink-preview">
     <div class="drink-icon">🥤</div>
-    <div>
-      <div class="drink-name" id="preview-name">Select a drink</div>
-      <div class="drink-label">Selected drink</div>
-    </div>
+    <div><div class="drink-name" id="preview-name">Select a drink</div><div class="drink-label">Selected drink</div></div>
   </div>
-
   <div class="form-group">
     <label for="drink-select">Choose a drink</label>
-    <select id="drink-select">
-      <option value="">Loading drinks...</option>
-    </select>
+    <select id="drink-select"><option value="">Loading drinks...</option></select>
   </div>
-
   <div class="form-group">
     <label for="notes">Notes (optional)</label>
     <textarea id="notes" placeholder="Pre-lecture fuel, late night session..."></textarea>
   </div>
-
   <button class="btn-primary" id="log-btn" onclick="handleLog()">Log it</button>
 </div>
 
+<nav class="bottom-nav">
+  <a href="dashboard.html"><span class="icon">🏠</span>Home</a>
+  <a href="log.html" class="active"><span class="icon">🥤</span>Log</a>
+  <a href="friends.html"><span class="icon">👥</span>Friends</a>
+  <a href="map.html"><span class="icon">📍</span>Map</a>
+</nav>
+
 <script>
   const API_BASE = 'https://monstermeter-production.up.railway.app/api';
-
-  // ── Auth guard ──
-  const userId   = localStorage.getItem('userId');
+  const userId = localStorage.getItem('userId');
   const username = localStorage.getItem('username');
-  if (!userId || !username) {
-    window.location.href = 'login.html';
-  }
+  if (!userId || !username) window.location.href = 'login.html';
+  $('#nav-avatar').text(username.substring(0, 2).toUpperCase());
 
-  // ── Set nav avatar ──
-  const initials = username ? username.substring(0, 2).toUpperCase() : '--';
-  $('#nav-avatar').text(initials);
-
-  // ── Load drinks from API ──
   function loadDrinks() {
     $.ajax({
-      url: API_BASE + '/drinks',
-      method: 'GET',
+      url: API_BASE + '/drinks', method: 'GET',
       success: function(drinks) {
-        const $select = $('#drink-select');
-        $select.empty();
-
-        if (drinks.length === 0) {
-          $select.append('<option value="">No drinks available</option>');
-          return;
-        }
-
-        drinks.forEach(function(drink) {
-          $select.append(`<option value="${drink.id}">${drink.name}</option>`);
-        });
-
-        // Set preview to first drink
+        const $select = $('#drink-select'); $select.empty();
+        if (drinks.length === 0) { $select.append('<option value="">No drinks available</option>'); return; }
+        drinks.forEach(function(drink) { $select.append(`<option value="${drink.id}">${drink.name}</option>`); });
         $('#preview-name').text(drinks[0].name);
       },
-      error: function() {
-        $('#drink-select').html('<option value="">Could not load drinks</option>');
-        $('#error-msg').text('Could not load drinks. Is the backend running?').show();
-      }
+      error: function() { $('#drink-select').html('<option value="">Could not load drinks</option>'); $('#error-msg').text('Could not load drinks.').show(); }
     });
   }
 
-  // ── Update preview when selection changes ──
-  $('#drink-select').on('change', function() {
-    const selectedText = $(this).find('option:selected').text();
-    $('#preview-name').text(selectedText);
-  });
+  $('#drink-select').on('change', function() { $('#preview-name').text($(this).find('option:selected').text()); });
 
-  // ── Submit log ──
   function handleLog() {
     const drinkId = $('#drink-select').val();
-    const notes   = $('#notes').val().trim();
-
-    $('#error-msg').hide();
-    $('#success-msg').hide();
-
-    if (!drinkId) {
-      $('#error-msg').text('Please select a drink.').show();
-      return;
-    }
-
+    const notes = $('#notes').val().trim();
+    $('#error-msg').hide(); $('#success-msg').hide();
+    if (!drinkId) { $('#error-msg').text('Please select a drink.').show(); return; }
     $('#log-btn').prop('disabled', true).text('Logging...');
-
     $.ajax({
-      url: API_BASE + '/logs',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        userId: parseInt(userId),
-        drinkId: parseInt(drinkId),
-        notes: notes || null
-      }),
+      url: API_BASE + '/logs', method: 'POST', contentType: 'application/json',
+      data: JSON.stringify({ userId: parseInt(userId), drinkId: parseInt(drinkId), notes: notes || null }),
       success: function() {
-        $('#success-msg').show();
-        $('#notes').val('');
+        $('#success-msg').show(); $('#notes').val('');
         $('#log-btn').prop('disabled', false).text('Log it');
-        // Redirect back to dashboard after a short delay
         setTimeout(() => window.location.href = 'dashboard.html', 1500);
       },
-      error: function() {
-        $('#error-msg').text('Failed to log drink. Please try again.').show();
-        $('#log-btn').prop('disabled', false).text('Log it');
-      }
+      error: function() { $('#error-msg').text('Failed to log drink. Please try again.').show(); $('#log-btn').prop('disabled', false).text('Log it'); }
     });
   }
 
-  // ── Logout ──
-  function handleLogout() {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('username');
-    window.location.href = 'login.html';
-  }
+  $('#store-name, #notes').on('keypress', function(e) { if (e.key === 'Enter') handleLog(); });
 
-  // ── Init ──
+  function handleLogout() { localStorage.removeItem('userId'); localStorage.removeItem('username'); window.location.href = 'login.html'; }
   loadDrinks();
 </script>
-
 </body>
 </html>
