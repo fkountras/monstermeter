@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MonsterMeter – Leaderboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    html { background: #0d1318; height: 100%; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0f14; min-height: 100vh; font-family: 'Inter', sans-serif; color: #c8f0f0; padding: 1.5rem 1rem 5rem; }
+
+    nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 0.5px solid #1e2d3a; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: #c8f0f0; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: #1e2d3a; border: 1px solid #4dd9e0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #4dd9e0; overflow: hidden; flex-shrink: 0; }
+    .logout-btn { font-size: 12px; color: #5a7080; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s; }
+    .logout-btn:hover { color: #f09595; }
+    .desktop-nav { display: flex; gap: 1.5rem; align-items: center; }
+    .desktop-nav a { font-size: 13px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .desktop-nav a:hover, .desktop-nav a.active { color: #4dd9e0; }
+
+    .page-header { margin-bottom: 1.75rem; }
+    .page-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: #c8f0f0; line-height: 1; }
+    .page-header p { font-size: 13px; color: #5a7080; margin-top: 6px; }
+
+    .filters { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+    .filter-select {
+      flex: 1; background: #111820; border: 0.5px solid #1e2d3a; border-radius: 8px;
+      padding: 10px 14px; font-size: 13px; color: #c8f0f0; font-family: 'Inter', sans-serif;
+      outline: none; cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a7080' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+      padding-right: 32px; transition: border-color 0.2s;
+    }
+    .filter-select:focus { border-color: #4dd9e0; }
+    .filter-select option { background: #111820; color: #c8f0f0; }
+
+    .leaderboard-card { background: #111820; border: 0.5px solid #1e2d3a; border-radius: 12px; overflow: hidden; }
+
+    .lb-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 13px 16px; border-bottom: 0.5px solid #1e2d3a;
+      transition: background 0.15s;
+    }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-row.is-me { background: rgba(77, 217, 224, 0.07); border-left: 2px solid #4dd9e0; }
+    .lb-row.is-me .lb-name { color: #4dd9e0; }
+
+    .lb-rank {
+      font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px;
+      color: #5a7080; width: 28px; text-align: center; flex-shrink: 0;
+    }
+    .lb-rank.gold   { color: #f5c842; }
+    .lb-rank.silver { color: #a0b4c0; }
+    .lb-rank.bronze { color: #c47a3a; }
+
+    .lb-avatar {
+      width: 38px; height: 38px; border-radius: 50%; background: #1e2d3a;
+      border: 1px solid #2a3d4a; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 500; color: #4dd9e0; overflow: hidden; flex-shrink: 0;
+    }
+    .lb-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+    .lb-info { flex: 1; min-width: 0; }
+    .lb-name { font-size: 14px; font-weight: 500; color: #c8f0f0; display: flex; align-items: center; gap: 6px; }
+    .lb-crown { font-size: 14px; line-height: 1; }
+    .lb-you { font-size: 10px; color: #4dd9e0; background: rgba(77,217,224,0.12); border-radius: 4px; padding: 1px 6px; letter-spacing: 0.5px; font-weight: 500; }
+
+    .lb-count {
+      font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px;
+      color: #4dd9e0; flex-shrink: 0; text-align: right;
+    }
+    .lb-count-label { font-size: 10px; color: #5a7080; text-align: right; margin-top: 1px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    .loading-state { padding: 2.5rem; text-align: center; color: #5a7080; font-size: 13px; }
+    .loading-state .spinner {
+      width: 24px; height: 24px; border: 2px solid #1e2d3a; border-top-color: #4dd9e0;
+      border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state { background: #111820; border: 0.5px dashed #1e2d3a; border-radius: 12px; padding: 2rem; text-align: center; color: #5a7080; font-size: 13px; }
+
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0d1318; border-top: 0.5px solid #1e2d3a; display: flex; justify-content: space-around; padding: 0.6rem 0 calc(0.8rem + env(safe-area-inset-bottom)); z-index: 100; }
+    .bottom-nav::after { content: ''; position: fixed; bottom: 0; left: 0; right: 0; height: env(safe-area-inset-bottom); background: #0d1318; z-index: 99; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .bottom-nav a.active { color: #4dd9e0; }
+    .bottom-nav .icon { font-size: 20px; }
+
+    @media (max-width: 600px) { .desktop-nav { display: none; } .page-header h1 { font-size: 28px; } .filters { flex-direction: column; } }
+    @media (min-width: 601px) { .bottom-nav { display: none; } body { padding-bottom: 1.5rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="dashboard.html">MonsterMeter</a>
+  <div class="desktop-nav">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="log.html">Log drink</a>
+    <a href="friends.html">Friends</a>
+    <a href="map.html">Map</a>
+    <a href="leaderboard.html" class="active">Leaderboard</a>
+    <a href="profile.html">Profile</a>
+  </div>
+  <div class="nav-right">
+    <div class="avatar" id="nav-avatar">--</div>
+    <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Leaderboard</h1>
+  <p>You and your friends, ranked by cans</p>
+</div>
+
+<div class="filters">
+  <select class="filter-select" id="drink-filter">
+    <option value="all">All drinks</option>
+  </select>
+  <select class="filter-select" id="period-filter">
+    <option value="month">Last month</option>
+    <option value="week">Last week</option>
+    <option value="year">Last year</option>
+    <option value="all">All time</option>
+  </select>
+</div>
+
+<div id="leaderboard-container">
+  <div class="leaderboard-card">
+    <div class="loading-state"><div class="spinner"></div>Loading leaderboard...</div>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html"><span class="icon">🏠</span>Home</a>
+  <a href="log.html"><span class="icon">🥤</span>Log</a>
+  <a href="friends.html"><span class="icon">👥</span>Friends</a>
+  <a href="map.html"><span class="icon">📍</span>Map</a>
+  <a href="leaderboard.html" class="active"><span class="icon">🏆</span>Ranks</a>
+</nav>
+
+<script>
+  const API_BASE = 'https://monstermeter-production.up.railway.app/api';
+  const userId = parseInt(localStorage.getItem('userId'));
+  const username = localStorage.getItem('username');
+  if (!userId || !username) window.location.href = 'login.html';
+
+  // Nav avatar
+  function initNavAvatar() {
+    const pic = localStorage.getItem('profilePicture');
+    const $nav = $('#nav-avatar');
+    if (pic) {
+      $nav.html(`<img src="${pic}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`);
+    } else {
+      $nav.text(username.substring(0, 2).toUpperCase());
+      $.ajax({
+        url: API_BASE + '/users/' + userId, method: 'GET',
+        success: function(user) {
+          if (user.profilePicture) {
+            localStorage.setItem('profilePicture', user.profilePicture);
+            $nav.html(`<img src="${user.profilePicture}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`);
+          }
+        }
+      });
+    }
+  }
+  initNavAvatar();
+
+  function handleLogout() {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    localStorage.removeItem('profilePicture');
+    window.location.href = 'login.html';
+  }
+
+  function initials(name) { return name.substring(0, 2).toUpperCase(); }
+
+  function getStartDate(period) {
+    const now = new Date();
+    if (period === 'week')  { const d = new Date(now); d.setDate(d.getDate() - 7); return d; }
+    if (period === 'month') { const d = new Date(now); d.setMonth(d.getMonth() - 1); return d; }
+    if (period === 'year')  { const d = new Date(now); d.setFullYear(d.getFullYear() - 1); return d; }
+    return null; // all time
+  }
+
+  function filterLogs(logs, drinkId, period) {
+    const startDate = getStartDate(period);
+    return logs.filter(function(log) {
+      if (drinkId !== 'all' && String(log.drinkId) !== String(drinkId)) return false;
+      if (startDate && new Date(log.loggedAt) < startDate) return false;
+      return true;
+    });
+  }
+
+  // State
+  let allPeople = [];   // [{ id, username, profilePicture }]
+  let allLogs = {};     // { userId: [logs] }
+  let drinksMap = {};   // { drinkId: drinkName }
+
+  function renderLeaderboard() {
+    const drinkId = $('#drink-filter').val();
+    const period  = $('#period-filter').val();
+
+    const ranked = allPeople.map(function(person) {
+      const logs = allLogs[person.id] || [];
+      const count = filterLogs(logs, drinkId, period).length;
+      return { person, count };
+    }).sort(function(a, b) { return b.count - a.count; });
+
+    const $container = $('#leaderboard-container');
+    $container.empty();
+
+    if (ranked.length === 0) {
+      $container.html('<div class="empty-state">No friends added yet — add some friends to compare stats!</div>');
+      return;
+    }
+
+    const $card = $('<div class="leaderboard-card"></div>');
+
+    ranked.forEach(function(entry, index) {
+      const pos = index + 1;
+      const isMe = entry.person.id === userId;
+      const isFirst = pos === 1;
+
+      let rankClass = '';
+      if (pos === 1) rankClass = 'gold';
+      else if (pos === 2) rankClass = 'silver';
+      else if (pos === 3) rankClass = 'bronze';
+
+      let avatarHtml = '';
+      if (entry.person.profilePicture) {
+        avatarHtml = `<img src="${entry.person.profilePicture}" />`;
+      } else {
+        avatarHtml = initials(entry.person.username);
+      }
+
+      const crownHtml = isFirst ? '<span class="lb-crown">👑</span>' : '';
+      const youBadge  = isMe    ? '<span class="lb-you">YOU</span>' : '';
+
+      $card.append(`
+        <div class="lb-row${isMe ? ' is-me' : ''}">
+          <div class="lb-rank ${rankClass}">${pos}</div>
+          <div class="lb-avatar">${avatarHtml}</div>
+          <div class="lb-info">
+            <div class="lb-name">${entry.person.username}${crownHtml}${youBadge}</div>
+          </div>
+          <div>
+            <div class="lb-count">${entry.count}</div>
+            <div class="lb-count-label">cans</div>
+          </div>
+        </div>
+      `);
+    });
+
+    $container.append($card);
+  }
+
+  function loadLeaderboard() {
+    $('#leaderboard-container').html('<div class="leaderboard-card"><div class="loading-state"><div class="spinner"></div>Loading leaderboard...</div></div>');
+
+    // 1. Load drinks for the dropdown
+    const drinksPromise = $.ajax({ url: API_BASE + '/drinks', method: 'GET' });
+
+    // 2. Load friends
+    const friendsPromise = $.ajax({ url: API_BASE + '/friendships/friends/' + userId, method: 'GET' });
+
+    // 3. Load current user info
+    const mePromise = $.ajax({ url: API_BASE + '/users/' + userId, method: 'GET' });
+
+    $.when(drinksPromise, friendsPromise, mePromise).then(
+      function(drinksRes, friendsRes, meRes) {
+        const drinks  = drinksRes[0];
+        const friends = friendsRes[0];
+        const me      = meRes[0];
+
+        // Populate drink dropdown (only once)
+        if ($('#drink-filter option').length === 1) {
+          drinks.forEach(function(d) {
+            drinksMap[d.id] = d.name;
+            $('#drink-filter').append(`<option value="${d.id}">${d.name}</option>`);
+          });
+        }
+
+        // Build people list: me + friends
+        const friendUsers = friends.map(function(f) {
+          return f.requester.id === userId ? f.receiver : f.requester;
+        });
+        allPeople = [{ id: me.id, username: me.username, profilePicture: me.profilePicture }]
+          .concat(friendUsers.map(function(u) {
+            return { id: u.id, username: u.username, profilePicture: u.profilePicture };
+          }));
+
+        // Fetch logs for everyone in parallel
+        const logRequests = allPeople.map(function(person) {
+          return $.ajax({ url: API_BASE + '/logs/user/' + person.id, method: 'GET' })
+            .then(function(logs) { allLogs[person.id] = logs; })
+            .catch(function()    { allLogs[person.id] = []; });
+        });
+
+        Promise.all(logRequests.map(function(r) { return r.promise ? r.promise() : r; }))
+          .then(renderLeaderboard)
+          .catch(renderLeaderboard); // render whatever we have
+      },
+      function() {
+        $('#leaderboard-container').html('<div class="empty-state">Could not load leaderboard. Is the backend running?</div>');
+      }
+    );
+  }
+
+  // Re-render on filter change (no extra API calls)
+  $('#drink-filter, #period-filter').on('change', renderLeaderboard);
+
+  loadLeaderboard();
+</script>
+</body>
+</html>
