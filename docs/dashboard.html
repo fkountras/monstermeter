@@ -141,8 +141,10 @@ initNavAvatar();
         if (logs.length === 0) { $list.html('<div class="empty-state">No drinks logged yet — hit the button above to start tracking!</div>'); return; }
         logs.slice(0, 5).forEach(function(log) {
           const notes = log.notes || 'No notes';
-          $list.append(`<div class="log-item"><div class="log-icon">🥤</div><div class="log-info"><div class="log-drink">${log.drinkName}</div><div class="log-meta">${notes}</div></div><div class="log-time">${formatLogDate(log.loggedAt)}</div></div>`);
-        });
+          const iconHtml = log.drinkImageUrl
+           ? '<img src="' + log.drinkImageUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:7px;" />'
+           :'🥤';
+          $list.append('<div class="log-item"><div class="log-icon">' + iconHtml + '</div><div class="log-info"><div class="log-drink">' + log.drinkName + '</div><div class="log-meta">' + notes + '</div></div><div class="log-time">' + formatLogDate(log.loggedAt) + '</div></div>');
       },
       error: function() { $('#log-list').html('<div class="error-msg">Could not load logs.</div>'); $('#stat-total').text('--'); $('#stat-week').text('--'); }
     });

@@ -11,6 +11,7 @@ public class ConsumptionLogResponseDTO {
     private String username;
     private Long drinkId;
     private String drinkName;
+    private String drinkImageUrl;
     private LocalDateTime loggedAt;
     private String notes;
 
@@ -21,6 +22,7 @@ public class ConsumptionLogResponseDTO {
         dto.setUsername(log.getUser().getUsername());
         dto.setDrinkId(log.getDrink().getId());
         dto.setDrinkName(log.getDrink().getName());
+        dto.setDrinkImageUrl(log.getDrink().getImageUrl());
         dto.setLoggedAt(log.getLoggedAt());
         dto.setNotes(log.getNotes());
         return dto;
