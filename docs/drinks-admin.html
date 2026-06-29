@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MonsterMeter – Manage Drinks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    html { background: #0d1318; height: 100%; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0f14; min-height: 100vh; font-family: 'Inter', sans-serif; color: #c8f0f0; padding: 1.5rem 1rem 5rem; }
+
+    nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 0.5px solid #1e2d3a; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 3px; color: #c8f0f0; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; background: #1e2d3a; border: 1px solid #4dd9e0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #4dd9e0; overflow: hidden; flex-shrink: 0; }
+    .logout-btn { font-size: 12px; color: #5a7080; background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: color 0.2s; }
+    .logout-btn:hover { color: #f09595; }
+    .desktop-nav { display: flex; gap: 1.5rem; align-items: center; }
+    .desktop-nav a { font-size: 13px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .desktop-nav a:hover, .desktop-nav a.active { color: #4dd9e0; }
+
+    .page-header { margin-bottom: 1.75rem; }
+    .page-header h1 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: #c8f0f0; line-height: 1; }
+    .page-header p { font-size: 13px; color: #5a7080; margin-top: 6px; }
+
+    .drink-grid { display: flex; flex-direction: column; gap: 10px; max-width: 560px; }
+
+    .drink-card {
+      background: #111820; border: 0.5px solid #1e2d3a; border-radius: 12px;
+      padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+    }
+
+    .drink-thumb {
+      width: 56px; height: 56px; border-radius: 8px; background: #0a0f14;
+      border: 0.5px solid #1e2d3a; display: flex; align-items: center;
+      justify-content: center; font-size: 26px; flex-shrink: 0; overflow: hidden;
+      cursor: pointer; transition: border-color 0.2s; position: relative;
+    }
+    .drink-thumb:hover { border-color: #4dd9e0; }
+    .drink-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 7px; }
+    .drink-thumb .overlay {
+      position: absolute; inset: 0; background: rgba(10,15,20,0.6);
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 7px; opacity: 0; transition: opacity 0.2s; font-size: 18px;
+    }
+    .drink-thumb:hover .overlay { opacity: 1; }
+
+    .drink-info { flex: 1; min-width: 0; }
+    .drink-name { font-size: 14px; font-weight: 500; color: #c8f0f0; }
+    .drink-meta { font-size: 12px; color: #5a7080; margin-top: 3px; }
+
+    .upload-btn {
+      background: none; border: 0.5px solid #1e2d3a; border-radius: 8px;
+      color: #4dd9e0; font-size: 12px; font-family: 'Inter', sans-serif;
+      padding: 7px 14px; cursor: pointer; white-space: nowrap;
+      transition: border-color 0.2s, background 0.2s; flex-shrink: 0;
+    }
+    .upload-btn:hover { border-color: #4dd9e0; background: rgba(77,217,224,0.07); }
+    .upload-input { display: none; }
+
+    .status-msg { font-size: 11px; margin-top: 4px; }
+    .status-msg.uploading { color: #5a7080; }
+    .status-msg.success  { color: #5dcaa5; }
+    .status-msg.error    { color: #f09595; }
+
+    .loading-state { color: #5a7080; font-size: 13px; padding: 1.5rem 0; }
+
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0d1318; border-top: 0.5px solid #1e2d3a; display: flex; justify-content: space-around; padding: 0.6rem 0 calc(0.8rem + env(safe-area-inset-bottom)); z-index: 100; }
+    .bottom-nav::after { content: ''; position: fixed; bottom: 0; left: 0; right: 0; height: env(safe-area-inset-bottom); background: #0d1318; z-index: 99; }
+    .bottom-nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #5a7080; text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
+    .bottom-nav a.active { color: #4dd9e0; }
+    .bottom-nav .icon { font-size: 20px; }
+
+    @media (max-width: 600px) { .desktop-nav { display: none; } .page-header h1 { font-size: 28px; } }
+    @media (min-width: 601px) { .bottom-nav { display: none; } body { padding-bottom: 1.5rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="dashboard.html">MonsterMeter</a>
+  <div class="desktop-nav">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="log.html">Log drink</a>
+    <a href="friends.html">Friends</a>
+    <a href="map.html">Map</a>
+    <a href="leaderboard.html">Leaderboard</a>
+    <a href="profile.html">Profile</a>
+  </div>
+  <div class="nav-right">
+    <div class="avatar" id="nav-avatar">--</div>
+    <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Manage Drinks</h1>
+  <p>Tap the image (or the button) to upload a photo for each drink</p>
+</div>
+
+<div id="drink-grid" class="drink-grid">
+  <div class="loading-state">Loading drinks...</div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="dashboard.html"><span class="icon">🏠</span>Home</a>
+  <a href="log.html"><span class="icon">🥤</span>Log</a>
+  <a href="friends.html"><span class="icon">👥</span>Friends</a>
+  <a href="leaderboard.html"><span class="icon">🏆</span>Ranks</a>
+  <a href="profile.html"><span class="icon">👤</span>Profile</a>
+</nav>
+
+<script>
+  const API_BASE = 'https://monstermeter-production.up.railway.app/api';
+  const CLOUDINARY_CLOUD  = 'dgfnqtjmz';
+  const CLOUDINARY_PRESET = 'monstermeter_drinks';
+
+  const userId   = localStorage.getItem('userId');
+  const username = localStorage.getItem('username');
+  if (!userId || !username) window.location.href = 'login.html';
+
+  function initNavAvatar() {
+    const pic = localStorage.getItem('profilePicture');
+    const $nav = $('#nav-avatar');
+    if (pic) {
+      $nav.html('<img src="' + pic + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />');
+    } else {
+      $nav.text(username.substring(0, 2).toUpperCase());
+      $.ajax({
+        url: API_BASE + '/users/' + userId, method: 'GET',
+        success: function(user) {
+          if (user.profilePicture) {
+            localStorage.setItem('profilePicture', user.profilePicture);
+            $nav.html('<img src="' + user.profilePicture + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />');
+          }
+        }
+      });
+    }
+  }
+  initNavAvatar();
+
+  function handleLogout() {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('username');
+    localStorage.removeItem('profilePicture');
+    window.location.href = 'login.html';
+  }
+
+  function uploadImage(file, drinkId, $card) {
+    const $status = $card.find('.status-msg');
+    const $thumb  = $card.find('.drink-thumb');
+    $status.text('Uploading...').removeClass('success error').addClass('uploading').show();
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_PRESET);
+
+    $.ajax({
+      url: 'https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload',
+      method: 'POST', data: formData, processData: false, contentType: false,
+      success: function(res) {
+        const imageUrl = res.secure_url;
+        $.ajax({
+          url: API_BASE + '/drinks/' + drinkId,
+          method: 'PATCH',
+          contentType: 'application/json',
+          data: JSON.stringify({ imageUrl: imageUrl }),
+          success: function() {
+            $thumb.html('<img src="' + imageUrl + '" /><div class="overlay">📷</div>');
+            $status.text('Image saved!').removeClass('uploading error').addClass('success');
+            setTimeout(function() { $status.fadeOut(); }, 2500);
+          },
+          error: function() {
+            $status.text('Uploaded but failed to save — try again.').removeClass('uploading success').addClass('error');
+          }
+        });
+      },
+      error: function() {
+        $status.text('Upload failed. Check your connection.').removeClass('uploading success').addClass('error');
+      }
+    });
+  }
+
+  function buildCard(drink) {
+    const thumbContent = drink.imageUrl
+      ? '<img src="' + drink.imageUrl + '" /><div class="overlay">📷</div>'
+      : '🥤<div class="overlay">📷</div>';
+
+    const meta = [
+      drink.brand   || null,
+      drink.flavour || null,
+      drink.volumeMl ? drink.volumeMl + 'ml' : null,
+      drink.calories ? drink.calories + ' kcal' : null,
+      drink.caffeine ? drink.caffeine + 'mg caffeine' : null
+    ].filter(Boolean).join(' · ');
+
+    const $card = $('<div class="drink-card" data-id="' + drink.id + '"></div>');
+    $card.html(
+      '<div class="drink-thumb" title="Click to upload image">' + thumbContent + '</div>' +
+      '<div class="drink-info">' +
+        '<div class="drink-name">' + drink.name + '</div>' +
+        '<div class="drink-meta">' + (meta || 'No details') + '</div>' +
+        '<div class="status-msg" style="display:none;"></div>' +
+      '</div>' +
+      '<label class="upload-btn">' +
+        (drink.imageUrl ? 'Change image' : 'Add image') +
+        '<input type="file" class="upload-input" accept="image/*" />' +
+      '</label>'
+    );
+
+    // Clicking the thumb also triggers the file input
+    $card.find('.drink-thumb').on('click', function() {
+      $card.find('.upload-input').trigger('click');
+    });
+
+    $card.find('.upload-input').on('change', function() {
+      const file = this.files[0];
+      if (file) uploadImage(file, drink.id, $card);
+    });
+
+    return $card;
+  }
+
+  function loadDrinks() {
+    $.ajax({
+      url: API_BASE + '/drinks', method: 'GET',
+      success: function(drinks) {
+        const $grid = $('#drink-grid');
+        $grid.empty();
+        if (drinks.length === 0) {
+          $grid.html('<div class="loading-state">No drinks found.</div>');
+          return;
+        }
+        drinks.forEach(function(drink) { $grid.append(buildCard(drink)); });
+      },
+      error: function() {
+        $('#drink-grid').html('<div class="loading-state" style="color:#f09595;">Could not load drinks.</div>');
+      }
+    });
+  }
+
+  loadDrinks();
+</script>
+</body>
+</html>

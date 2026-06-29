@@ -29,4 +29,7 @@ public class Drink {
 
     @Column
     private String flavour;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 }

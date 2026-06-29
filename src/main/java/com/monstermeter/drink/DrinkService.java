@@ -44,6 +44,7 @@ public class DrinkService {
         drink.setCalories(updated.getCalories());
         drink.setFlavour(updated.getFlavour());
         drink.setVolumeMl(updated.getVolumeMl());
+        drink.setImageUrl(updated.getImageUrl());
         return drinkRepository.save(drink);
     }
 
@@ -62,6 +63,8 @@ public class DrinkService {
             drink.setFlavour(updated.getFlavour());
         if (updated.getVolumeMl() != null)
             drink.setVolumeMl(updated.getVolumeMl());
+        if (updated.getImageUrl() != null)
+            drink.setImageUrl(updated.getImageUrl());
         return drinkRepository.save(drink);
     }
 }
