@@ -53,8 +53,12 @@ public class FriendshipService {
     }
 
     public List<Friendship> getFriends(Long userId) {
-        return friendshipRepository.findByReceiverId(userId).stream()
-                .filter(f -> f.getStatus() == FriendshipStatus.ACCEPTED).toList();
+        List<Friendship> asReceiver = friendshipRepository.findByReceiverIdAndStatus(userId, FriendshipStatus.ACCEPTED);
+        List<Friendship> asRequester = friendshipRepository.findByRequesterIdAndStatus(userId,
+                FriendshipStatus.ACCEPTED);
+        List<Friendship> all = new java.util.ArrayList<>(asReceiver);
+        all.addAll(asRequester);
+        return all;
     }
 
     public void deleteFriendship(Long id) {
