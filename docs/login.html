@@ -140,6 +140,7 @@
       success: function(response) {
         localStorage.setItem('userId', response.id);
         localStorage.setItem('username', response.username);
+        if (response.profilePicture) localStorage.setItem('profilePicture', response.profilePicture);
         window.location.href = 'dashboard.html';
       },
       error: function(xhr) {
