@@ -145,6 +145,7 @@ initNavAvatar();
            ? '<img src="' + log.drinkImageUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:7px;" />'
            :'🥤';
           $list.append('<div class="log-item"><div class="log-icon">' + iconHtml + '</div><div class="log-info"><div class="log-drink">' + log.drinkName + '</div><div class="log-meta">' + notes + '</div></div><div class="log-time">' + formatLogDate(log.loggedAt) + '</div></div>');
+        });
       },
       error: function() { $('#log-list').html('<div class="error-msg">Could not load logs.</div>'); $('#stat-total').text('--'); $('#stat-week').text('--'); }
     });
